@@ -9,6 +9,9 @@ namespace ConversionToolsWeb
             // Add services to the container.
             builder.Services.AddRazorPages();
 
+            DISetup.ConfigureServices(builder.Services);
+
+
             var app = builder.Build();
 
             // Configure the HTTP request pipeline.
@@ -23,6 +26,8 @@ namespace ConversionToolsWeb
             app.UseAuthorization();
 
             app.MapRazorPages();
+
+            app.MapControllers();
 
             app.Run();
         }
