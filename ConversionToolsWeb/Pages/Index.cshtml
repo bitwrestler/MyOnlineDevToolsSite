@@ -3,8 +3,27 @@
 @{
     ViewData["Title"] = "DateTime Conversion Tools";
 }
-
-<div class="grid">
-    <div>Ticks</div>
-    <div>TimeZone</div>
-</div>
+<form id="convertForm" method="post" class="pico">
+    <div class="grid">
+        <div>Date/Time</div>
+        <div>Ticks</div>
+        <div>TimeZone</div>
+        <div>Action</div>
+    </div>
+    <div class="grid">
+        <div>
+            <input asp-for="DateEntry" type="text" id="dateEntry" name="dateEntry" placeholder="Date/Time" aria-label="Date/Time:">
+        </div>
+        <div><input asp-for="TicksEntry" type="number" id="ticksEntry" name="ticksEntry" placeholder="Ticks" aria-label="Ticks:"></div>
+        <div>
+            <select id="timezoneSelect" asp-for="SelectedTimeZone" aria-label="Timezone">
+                    @foreach (var tz in Model.SupportedTimeZones)
+                    {
+                        <option value="@tz">@tz</option>
+			        }
+            </select>
+        </div>
+        <div>
+            <input id="convertButton" type="submit" value="Convert"/>
+    </div>
+</form>
