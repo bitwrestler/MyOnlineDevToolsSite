@@ -59,5 +59,13 @@ namespace ConversionToolsWeb.Controllers
                 Ticks = dateTimeConversionRequest.Ticks
             });
         }
+
+        [HttpGet]
+        [Route("supported-timezones")]
+        public IActionResult GetSupportedTimeZones([FromServices] ITimeZoneInfoResolver timeZoneInfoResolver)
+        {
+            var supportedTimeZones = timeZoneInfoResolver.SupportedTimeZones;
+            return Ok(supportedTimeZones);
+        }
     }
 }
