@@ -16,21 +16,7 @@ namespace ConversionToolsWeb.Pages
             _timeZoneInfoResolver = timeZoneInfoResolver;
         }
 
-
         public IEnumerable<string> SupportedTimeZones => _timeZoneInfoResolver.SupportedTimeZones;
         
-        [BindProperty]
-        public string? DateEntry { get; set; }
-
-        [BindProperty]
-        public long? TicksEntry { get; set; }
-
-        [BindProperty]
-        public string? SelectedTimeZone { get; set; }
-
-        public void OnPostConvert()
-        {
-
-        }
     }
 }

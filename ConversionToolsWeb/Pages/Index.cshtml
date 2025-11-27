@@ -12,18 +12,28 @@
     </div>
     <div class="grid">
         <div>
-            <input asp-for="DateEntry" type="text" id="dateEntry" name="dateEntry" placeholder="Date/Time" aria-label="Date/Time:">
+            <input type="text" id="dateEntry" name="dateEntry" placeholder="Date/Time" aria-label="Date/Time:">
         </div>
-        <div><input asp-for="TicksEntry" type="number" id="ticksEntry" name="ticksEntry" placeholder="Ticks" aria-label="Ticks:"></div>
+        <div><input type="number" id="ticksEntry" name="ticksEntry" placeholder="Ticks" aria-label="Ticks:"></div>
         <div>
-            <select id="timezoneSelect" asp-for="SelectedTimeZone" aria-label="Timezone">
+            <select id="timeZoneSelect" aria-label="Timezone">
+                @{
+                        var index = 0;
+                 }    
                     @foreach (var tz in Model.SupportedTimeZones)
                     {
-                        <option value="@tz">@tz</option>
+                        var selected = ++index == 1 ? "SELECTED" : null; 
+                        <option value="@tz" selected="@selected">@tz</option>
 			        }
             </select>
         </div>
         <div>
-            <input id="convertButton" type="submit" value="Convert"/>
+            <input id="convertButton" type="button" value="Convert" onclick="javascript:convert()"/>
+        </div>
     </div>
 </form>
+
+
+@section Scripts {
+    <script src="~/js/indexCtrl.js" asp-append-version="true"></script>
+}
