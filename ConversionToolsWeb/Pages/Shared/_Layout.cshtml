@@ -4,14 +4,25 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@ViewData["Title"]</title>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@@picocss/pico@2/css/pico.conditional.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@@picocss/pico@@2/css/pico.min.css">
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
 </head>
 <body>
     <header>
         
     </header>
+       
         <main class="container-fluid">
+        <nav>
+            <ul>
+                <li><h1><strong>Tools</strong></h1></li>
+            </ul>
+            <ul>
+                <li><a href="/" role="button" class="outline">DateTime</a></li>
+            </ul>
+        </nav>
+
+
             @RenderBody()
         </main>
 
