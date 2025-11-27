@@ -1,41 +1,40 @@
-﻿var form, dateEl, ticksEl, timeZoneSelectEl, convertBtnEl;
-
+﻿let ticksId = "#ticksEntry";
+let dateId = "#dateEntry";
+let timeZoneSelectId = "#timeZoneSelect";
+let convertButtonId = "#convertButton";
 
 document.addEventListener('DOMContentLoaded', function () {
-    form = document.getElementById('convertForm');
-    dateEl = document.getElementById('dateEntry');
-    ticksEl = document.getElementById('ticksEntry');
-    timeZoneSelectEl = document.getElementById('timeZoneSelect');
-    convertBtnEl = document.getElementById('convertButton');
-
-        dateEl?.addEventListener('change', function () {
-            ticksEl.value = '';
-            checkEnableConvert();
-        });
-        ticksEl?.addEventListener('change', function () {
-            dateEl.value = '';
-            checkEnableConvert();
-        });
-        timeZoneSelectEl?.addEventListener('change', function () {
-
-        });
+    $(dateId).change(function () {
+        $(ticksId).val('');
+        evalEnableConvert();
+    });
+    $(ticksId).change(function () {
+        $(dateId).val('');
+        evalEnableConvert();
+    });
 });
 
 function convert() {
     if (! checkEnableConvert()) {
         return;
     }
-    if (dateEl.value) {
-        let ret = convertDateToTicks(dateEl.value, timeZoneSelectEl.value);
-        if (ret) {
-            ticksEl.value = ret.Ticks;
-        }
+    var id;
+    var retProperty;
+    let dateVal = $(dateId).val();
+    let ticksVal = $(ticksId).val();
+    let timeZoneVal = $(timeZoneSelectId).val();
+    if (dateVal) {
+        ret = convertDateToTicks(dateVal, timeZoneVal);
+        id = ticksId;
+        retProperty = 'Ticks';
     }
-    else if (ticksEl.value) {
-        let ret = convertTicksToDate(ticksEl.value, timeZoneSelectEl.value);
-        if (ret) {
-            dateEl.value = ret.DateTime;
-        }
+    else if (ticksVal) {
+        ret = convertTicksToDate(ticksVal, timeZoneVal);
+        id = dateId;
+        retProperty = 'DateTime';
+    }
+    if (ret) {
+        $(id).val(ret[retProperty]);
     }
 }
 
@@ -47,7 +46,10 @@ function convertTicksToDate(ticksStr, timeZone) {
     return { Ticks: ticksStr, DateTime: '2025-11-22 XX:XX', TimeZoneId : timeZone };
 }
 
+function evalEnableConvert() {
+    $(convertButtonId).disabled = !checkEnableConvert();
+}
+f
 function checkEnableConvert() {
-    convertBtnEl.disabled = !dateEl.value && !ticksEl.value;
-    return ! convertBtnEl.disabled;
+    return $(dateId).val || $(ticksId).val;
 }
