@@ -18,38 +18,48 @@ function convert() {
     if (! checkEnableConvert()) {
         return;
     }
-    var id;
-    var retProperty;
     let dateVal = $(dateId).val();
     let ticksVal = $(ticksId).val();
     let timeZoneVal = $(timeZoneSelectId).val();
     if (dateVal) {
-        ret = convertDateToTicks(dateVal, timeZoneVal);
-        id = ticksId;
-        retProperty = 'Ticks';
+
+        convertDateToTicks(dateVal, timeZoneVal, function (data) { $(ticksId).val(data.ticks); });
     }
     else if (ticksVal) {
-        ret = convertTicksToDate(ticksVal, timeZoneVal);
-        id = dateId;
-        retProperty = 'DateTime';
-    }
-    if (ret) {
-        $(id).val(ret[retProperty]);
+        convertTicksToDate(ticksVal, timeZoneVal, function (data) { $(dateId).val(data.dateTime); });
     }
 }
 
-function convertDateToTicks(dateStr, timeZone) {
-    return { Ticks: '637234567890123456', DateTime : dateStr, TimeZoneId : timeZone };
+function convertDateToTicks(dateStr, timeZone, callback) {
+    let model = { DateTime: dateStr, TimeZoneId: timeZone };
+    _makeRequest("/api/to-ticks", model,callback);
 }
 
-function convertTicksToDate(ticksStr, timeZone) {
-    return { Ticks: ticksStr, DateTime: '2025-11-22 XX:XX', TimeZoneId : timeZone };
+function convertTicksToDate(ticksStr, timeZone,callback) {
+    let model = { Ticks: ticksStr, TimeZoneId: timeZone };
+    _makeRequest("/api/from-ticks", model, callback);
 }
 
 function evalEnableConvert() {
-    $(convertButtonId).disabled = !checkEnableConvert();
+    $(convertButtonId).prop('disabled', !checkEnableConvert());
 }
-f
+
 function checkEnableConvert() {
-    return $(dateId).val || $(ticksId).val;
+    return !!($(dateId).val || $(ticksId).val);
+}
+
+function _makeRequest(url, model, callback, requestType = "POST") {
+    let errorCallback = function (jqXHR, textStatus, errorThrown) {
+        console.log("ERROR", textStatus, errorThrown);
+        console.log(jqXHR);
+    };
+    $.ajax({
+        url: url,
+        contentType: "application/json; charset=utf-8",
+        dataType: "json",
+        type: requestType,
+        data: JSON.stringify(model),
+        success: callback,
+        error: errorCallback
+    });
 }
