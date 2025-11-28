@@ -2,7 +2,7 @@
 {
     public class NowResponse
     {
-        public string TimeZoneId { get; set; }
+        public required string TimeZoneId { get; set; }
         public DateTime DateTime { get; set; }
     }
 }
