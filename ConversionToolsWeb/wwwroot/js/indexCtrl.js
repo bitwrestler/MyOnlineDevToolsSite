@@ -7,19 +7,17 @@ document.addEventListener('DOMContentLoaded', function () {
         let controlIds = _getControlIds(possibleControls[i]);
         $(controlIds.date).change(function () {
             lastResultControl = controlIds.date;
-            $(controlIds.numeric).val('');
+            if ($(controlIds.date).val()) {
+                $(controlIds.numeric).val('');
+            }
             evalEnableConvert(controlIds);
         });
         $(controlIds.numeric).change(function () {
             lastResultControl = controlIds.date;
-            $(controlIds.date).val('');
+            if ($(controlIds.numeric).val()) {
+                $(controlIds.date).val('');
+            }
             evalEnableConvert(controlIds);
-        });
-        $(controlIds.tz).change(function () {
-            //if (lastResultControl) {
-            //    $(lastResultControl).val('');
-            //    lastResultControl = null;
-            //}
         });
         evalEnableConvert(controlIds);
     }
