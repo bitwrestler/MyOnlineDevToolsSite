@@ -105,3 +105,18 @@ footer div {
     background-color: #f5f5f5;
     margin: 10pt;
 }
+
+/* small utility for the "Now" row: place title and refresh icon side-by-side */
+.now-row {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem; /* space between the title and the icon */
+    margin-bottom: 0.5rem;
+}
+
+.now-row img {
+    cursor: pointer;
+    display: block;
+    height: 22px;
+    width: 22px;
+}
