@@ -1,0 +1,19 @@
+@using Microsoft.AspNetCore.Components
+@using System.Linq
+
+<select id="@Id" aria-label="Timezone" name="@Name">
+@{
+    var idx = 0;
+    foreach (var tz in TimeZones ?? Enumerable.Empty<string>())
+    {
+        var isSelected = idx++ == 0;
+        <option value="@tz" selected="@(isSelected ? "selected" : null)">@tz</option>
+    }
+}
+</select>
+
+@code {
+    [Parameter] public IEnumerable<string>? TimeZones { get; set; }
+    [Parameter] public string Id { get; set; } = "timeZoneSelect";
+    [Parameter] public string Name { get; set; } = "timeZoneSelect";
+}

@@ -9,16 +9,12 @@
         <div><input type="text" id="dateEntry" name="dateEntry" placeholder="Date/Time" aria-label="Date/Time:"></div>
         <div><input type="number" id="ticksEntry" name="ticksEntry" placeholder="Ticks" aria-label="Ticks:"></div>
         <div>
-            <select id="timeZoneSelect" aria-label="Timezone">
-                @{
-                        var index = 0;
-                 }    
-                    @foreach (var tz in Model.SupportedTimeZones)
-                    {
-                        var selected = ++index == 1 ? "SELECTED" : null; 
-                        <option value="@tz" selected="@selected">@tz</option>
-			        }
-            </select>
+            <component type="typeof(ConversionToolsWeb.Components.TimeZoneSelect)"
+                       render-mode="Static"
+                       param-TimeZones="Model.SupportedTimeZones"
+                       param-Id=@("timeZoneSelect")
+                       param-Name=@("timeZoneSelect")
+/>
         </div>
         <div>
             <input id="convertButton" type="button" value="Convert Ticks" onclick="javascript:convert(true)"/>
@@ -28,16 +24,11 @@
         <div><input type="text" id="unixDateEntry" name="unixDateEntry" placeholder="Date/Time" aria-label="Date/Time:"></div>
         <div><input type="number" id="unixEpochEntry" name="unixEpochEntry" placeholder="Epoch Seconds" aria-label="Epoch Seconds:"></div>
         <div>
-            <select id="unixTimeZoneSelect" aria-label="Timezone">
-                @{
-                    index = 0;
-                }
-                @foreach (var tz in Model.SupportedTimeZones)
-                {
-                    var selected = ++index == 1 ? "SELECTED" : null;
-                    <option value="@tz" selected="@selected">@tz</option>
-                }
-            </select>
+            <component type="typeof(ConversionToolsWeb.Components.TimeZoneSelect)"
+                       render-mode="Static"
+                       param-TimeZones="Model.SupportedTimeZones"
+                       param-Id=@("unixTimeZoneSelect")
+                       param-Name=@("unixTimeZoneSelect") />
         </div>
         <div>
             <input id="unixConvertButton" type="button" value="Convert Unix Epoch" onclick="javascript:convert(false)" />
