@@ -41,6 +41,32 @@ body {
   */
     }
 
+/* Top-left overlay that sits on top of the banner image */
+.banner-overlay {
+    position: absolute;
+    left: 1rem; /* distance from left edge */
+    top: 1rem; /* distance from top edge -> top-left */
+    transform: none; /* remove vertical centering transform */
+    z-index: 10;
+    background: rgba(0, 0, 0, 0.45); /* translucent backdrop for legibility */
+    color: #ffffff;
+    margin: 2.50rem;
+    padding: 0.35rem 0.6rem;
+    border-radius: 0.375rem;
+    box-shadow: 0 0.25rem 0.5rem rgba(0, 0, 0, 0.12);
+}
+
+/* Title sizing and spacing */
+.banner-title {
+    padding:10pt;
+    margin: 0;
+    font-size: 2.25rem;
+    line-height: 1;
+    font-weight: 700;
+    color: aliceblue
+}
+
+
 
 /* Site nav scoped so it won't override Pico's global nav styles */
 .site-nav {
