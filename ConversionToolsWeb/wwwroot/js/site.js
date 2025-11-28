@@ -2,3 +2,39 @@
 // for details on configuring this project to bundle and minify static web assets.
 
 // Write your JavaScript code.
+
+(function ($) {
+
+    const navSelector = 'nav a';
+
+    // Normalize a path for comparison: remove query/hash, trailing slash, decode, lower-case
+    function getAnchorFromUrl(p) {
+        if (!p || p.indexOf('#') == -1) return 'datetime';
+        return p.split('#')[1];
+    }
+
+    function markActiveNav(selector, force) {
+        var current = getAnchorFromUrl(force || window.location.href);
+        $(selector).each(function () {
+            var href = $(this).attr('href');
+            if (!href) return;
+            var linkPath = getAnchorFromUrl(href);
+            if (current === linkPath) {
+                $(this).removeClass('outline');
+                $(this).addClass('secondary');
+            } else {
+                $(this).removeClass('secondary');
+                $(this).addClass('outline');
+            }
+        });
+    }
+
+    $(document).on('click', navSelector, function () {
+        markActiveNav(navSelector, $(this).attr('href'));
+    });
+
+    $(function () {
+        markActiveNav(navSelector);
+    });
+
+})(jQuery);  
