@@ -1,15 +1,25 @@
-﻿document.addEventListener('DOMContentLoaded', function () {
+﻿let lastResultControl = null;
+
+document.addEventListener('DOMContentLoaded', function () {
     let possibleControls = [true, false];
 
     for (let i = 0; i < possibleControls.length; i++) {
         let controlIds = _getControlIds(possibleControls[i]);
         $(controlIds.date).change(function () {
+            lastResultControl = controlIds.date;
             $(controlIds.numeric).val('');
             evalEnableConvert(controlIds);
         });
         $(controlIds.numeric).change(function () {
+            lastResultControl = controlIds.date;
             $(controlIds.date).val('');
             evalEnableConvert(controlIds);
+        });
+        $(controlIds.tz).change(function () {
+            //if (lastResultControl) {
+            //    $(lastResultControl).val('');
+            //    lastResultControl = null;
+            //}
         });
         evalEnableConvert(controlIds);
     }
@@ -32,7 +42,7 @@ function convert(ticksOrUnix) {
     if (!checkEnableConvert(controlIds)) {
         return;
     }
-    let dateVal = $(controlIds.date).val();
+    let dateVal = $(controlIds.date).val().replace(/Z$/, "");
     let ticksVal = $(controlIds.numeric).val();
     let timeZoneVal = $(controlIds.tz).val();
     if (dateVal) {
@@ -40,7 +50,7 @@ function convert(ticksOrUnix) {
         convertDateToTicks(ticksOrUnix, dateVal, timeZoneVal, function (data) { $(controlIds.numeric).val(data.ticks); });
     }
     else if (ticksVal) {
-        convertTicksToDate(ticksVal, timeZoneVal, function (data) { $(controlIds.date).val(data.dateTime); });
+        convertTicksToDate(ticksOrUnix, ticksVal, timeZoneVal, function (data) { $(controlIds.date).val(data.dateTime); });
     }
 }
 
