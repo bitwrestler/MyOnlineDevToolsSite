@@ -5,14 +5,16 @@
         let controlIds = _getControlIds(possibleControls[i]);
         $(controlIds.date).change(function () {
             $(controlIds.numeric).val('');
-            evalEnableConvert();
+            evalEnableConvert(controlIds);
         });
         $(controlIds.numeric).change(function () {
             $(controlIds.date).val('');
-            evalEnableConvert();
+            evalEnableConvert(controlIds);
         });
+        evalEnableConvert(controlIds);
     }
     getNows();
+
 });
 
 function _getControlIds(ticksOrUnix) {
@@ -55,11 +57,11 @@ function convertTicksToDate(ticksOrUnix, ticksStr, timeZone,callback) {
 }
 
 function evalEnableConvert(controlIds) {
-    $(controlIds.button).prop('disabled', !checkEnableConvert());
+    $(controlIds.button).prop('disabled', !checkEnableConvert(controlIds));
 }
 
 function checkEnableConvert(controlIds) {
-    return !!($(controlIds.date).val || $(controlIds.numeric).val);
+    return !!($(controlIds.date).val() || $(controlIds.numeric).val());
 }
 
 function getNows() {

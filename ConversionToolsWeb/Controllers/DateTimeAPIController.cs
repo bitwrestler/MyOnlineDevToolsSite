@@ -86,7 +86,7 @@ namespace ConversionToolsWeb.Controllers
             });
         }
 
-        [Route("from-ticks")]
+        [Route("from-unix")]
         [HttpPost]
         public IActionResult ConvertFromEpochSeconds([FromBody] DateTimeConversionRequest dateTimeConversionRequest)
         {
