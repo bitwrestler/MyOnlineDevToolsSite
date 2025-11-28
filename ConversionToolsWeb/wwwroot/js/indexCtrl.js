@@ -12,6 +12,7 @@ document.addEventListener('DOMContentLoaded', function () {
         $(dateId).val('');
         evalEnableConvert();
     });
+    getNows();
 });
 
 function convert() {
@@ -32,12 +33,12 @@ function convert() {
 
 function convertDateToTicks(dateStr, timeZone, callback) {
     let model = { DateTime: dateStr, TimeZoneId: timeZone };
-    _makeRequest("/api/to-ticks", model,callback);
+    makePostRequest("/api/to-ticks", model,callback);
 }
 
 function convertTicksToDate(ticksStr, timeZone,callback) {
     let model = { Ticks: ticksStr, TimeZoneId: timeZone };
-    _makeRequest("/api/from-ticks", model, callback);
+    makePostRequest("/api/from-ticks", model, callback);
 }
 
 function evalEnableConvert() {
@@ -48,17 +49,43 @@ function checkEnableConvert() {
     return !!($(dateId).val || $(ticksId).val);
 }
 
-function _makeRequest(url, model, callback, requestType = "POST") {
+function getNows() {
+    let nowRoutine = function (data) {
+        const nowElement = $("#nowResult");
+        nowElement.empty();
+        data.forEach(function (item, idx) {
+            let newRow = $("<div>").addClass("grid").appendTo(nowElement);
+            $("<div>").text(item.timeZoneId).appendTo(newRow);
+            $("<div>").text(item.dateTime).appendTo(newRow);
+        });
+    };
+    makeGetRequest("/api/now",nowRoutine);
+}
+
+function makeGetRequest(url, callback)
+{
+    _makeRequest(url, null, callback, "GET");
+}
+
+function makePostRequest(url, model, callback)
+{
+    _makeRequest(url, model, callback, "POST");
+}
+
+function _makeRequest(url, model, callback, requestType) {
     let errorCallback = function (jqXHR, textStatus, errorThrown) {
         console.log("ERROR", textStatus, errorThrown);
         console.log(jqXHR);
     };
+    if (model) {
+        model = JSON.stringify(model);
+    }
     $.ajax({
         url: url,
         contentType: "application/json; charset=utf-8",
         dataType: "json",
         type: requestType,
-        data: JSON.stringify(model),
+        data: model,
         success: callback,
         error: errorCallback
     });

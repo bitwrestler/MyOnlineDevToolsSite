@@ -26,5 +26,10 @@ namespace ConversionToolsWeb.Services
             var utcDateTime = new DateTime(ticks);
             return TimeZoneInfo.ConvertTime(utcDateTime, TimeZoneInfo.FindSystemTimeZoneById(timeZoneId));
         }
+
+        public DateTime GetNow(TimeZoneInfo timeZone)
+        {
+            return TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, timeZone);
+        }
     }
 }

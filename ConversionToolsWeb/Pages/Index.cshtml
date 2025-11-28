@@ -4,6 +4,7 @@
     ViewData["Title"] = "DateTime Conversion Tools";
 }
 <form id="convertForm" method="post" class="pico">
+    <h2>Conversion</h2>
     <div class="grid">
         <div>Date/Time</div>
         <div>Ticks</div>
@@ -31,6 +32,17 @@
             <input id="convertButton" type="button" value="Convert" onclick="javascript:convert()"/>
         </div>
     </div>
+    <br />
+    <h2>Now</h2>
+    <div class="grid">
+        <div><strong>TimeZone</strong></div>
+        <div><strong>Now</strong></div>
+    </div>
+
+    <span id="nowResult">
+
+    </span>
+
 </form>
 
 

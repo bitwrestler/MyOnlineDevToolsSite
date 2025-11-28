@@ -9,11 +9,13 @@ namespace ConversionToolsWeb.Controllers
     {
         private readonly IDateTimeConversionService _dateTimeConversionService;
         private readonly IDateTimeParserService _dateTimeParserService;
+        private readonly ITimeZoneInfoResolver _timeZoneInfoResolver;
 
-        public DateTimeAPIController(IDateTimeConversionService dateTimeConversionService, IDateTimeParserService dateTimeParserService)
+        public DateTimeAPIController(IDateTimeConversionService dateTimeConversionService, IDateTimeParserService dateTimeParserService, ITimeZoneInfoResolver timeZoneInfoResolver)
         {
             _dateTimeConversionService = dateTimeConversionService;
             _dateTimeParserService = dateTimeParserService;
+            _timeZoneInfoResolver = timeZoneInfoResolver;
         }
 
         [Route("to-ticks")]
@@ -62,10 +64,17 @@ namespace ConversionToolsWeb.Controllers
 
         [HttpGet]
         [Route("supported-timezones")]
-        public IActionResult GetSupportedTimeZones([FromServices] ITimeZoneInfoResolver timeZoneInfoResolver)
+        public IActionResult GetSupportedTimeZones()
         {
-            var supportedTimeZones = timeZoneInfoResolver.SupportedTimeZones;
+            var supportedTimeZones = _timeZoneInfoResolver.SupportedTimeZones;
             return Ok(supportedTimeZones);
+        }
+
+        [HttpGet]
+        [Route("now")]
+        public IActionResult GetNows()
+        {
+            return Ok(_timeZoneInfoResolver.SupportedTimeZoneInfos.Select(s => new NowResponse() { TimeZoneId = s.Id , DateTime = _dateTimeConversionService.GetNow(s) } ));
         }
     }
 }
