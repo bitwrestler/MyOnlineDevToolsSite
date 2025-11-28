@@ -20,3 +20,62 @@ html {
 body {
   margin-bottom: 60px;
 }
+
+/* Responsive banner image (fits its container) */
+.site-banner {
+    display: block; /* removes inline gaps */
+    width: 100%; /* fill the container's width */
+    max-width: 100%; /* never exceed viewport/container */
+    height: auto; /* preserve aspect ratio */
+    object-fit: cover; /* optional: cover and crop if needed */
+}
+
+    /* Full-bleed banner (span the entire viewport, breaks out of centered containers) */
+    .site-banner.full-bleed {
+        width: 100vw;
+        margin-left: calc(50% - 50vw);
+        margin-right: calc(50% - 50vw);
+        /* optionally set a fixed height or min-height to control cropping:
+     height: 200px;
+     object-fit: cover;
+  */
+    }
+
+
+/* Site nav scoped so it won't override Pico's global nav styles */
+.site-nav {
+    position: relative;
+    margin-top: -2.5rem; /* small overlap if desired */
+    z-index: 20;
+    background: rgba(255,255,255,0.9);
+    padding: 0.35rem 0.75rem;
+    border-radius: 0.5rem;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+    /* Keep the brand and links aligned; let Pico handle link styles */
+    .site-nav .brand {
+        font-weight: 700;
+        text-decoration: none;
+    }
+
+/* Responsive reduction of overlap */
+@media (max-width: 576px) {
+    .site-nav {
+        margin-top: -1rem;
+        padding: 0.25rem 0.5rem;
+        gap: 0.5rem;
+    }
+}
+
+footer div {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    height: 60px;
+    line-height: 60px;
+    background-color: #f5f5f5;
+    margin: 10pt;
+}

@@ -9,11 +9,12 @@
 </head>
 <body>
     <header>
-        
+        <img src="~/clocksAndStuff.jpg" alt="Banner Image" width="1024" height="100" class="site-banner"/>     
     </header>
        
         <main class="container-fluid">
-        <nav>
+        
+            <nav>
             <ul>
                 <li><h1><strong>Tools</strong></h1></li>
             </ul>
@@ -22,14 +23,11 @@
             </ul>
         </nav>
 
-
             @RenderBody()
         </main>
 
     <footer class="border-top footer text-muted">
-        <div class="container">
-            &copy; 2025 - @ViewData["Title"]
-        </div>
+            <div>&copy; 2025 @ViewData["Title"]</div>
     </footer>
 
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
