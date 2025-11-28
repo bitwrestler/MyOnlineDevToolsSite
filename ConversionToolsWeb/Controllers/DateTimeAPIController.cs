@@ -62,6 +62,50 @@ namespace ConversionToolsWeb.Controllers
             });
         }
 
+        [Route("to-unix")]
+        [HttpPost]
+        public IActionResult ConvertToEpochSeconds([FromBody] DateTimeConversionRequest dateTimeConversionRequest)
+        {
+            if (string.IsNullOrWhiteSpace(dateTimeConversionRequest.TimeZoneId))
+            {
+                return BadRequest("TimeZoneId is required.");
+            }
+
+            var dateTime = _dateTimeParserService.Parse(dateTimeConversionRequest.DateTime);
+
+            var ticks = _dateTimeConversionService.ToEpochSeconds(
+                dateTime,
+                dateTimeConversionRequest.TimeZoneId
+                );
+
+            return Ok(new DateTimeConversionResponse
+            {
+                DateTime = dateTime,
+                TimeZoneId = dateTimeConversionRequest.TimeZoneId,
+                Ticks = ticks
+            });
+        }
+
+        [Route("from-ticks")]
+        [HttpPost]
+        public IActionResult ConvertFromEpochSeconds([FromBody] DateTimeConversionRequest dateTimeConversionRequest)
+        {
+            if (string.IsNullOrWhiteSpace(dateTimeConversionRequest.TimeZoneId))
+            {
+                return BadRequest("TimeZoneId is required.");
+            }
+            var dateTime = _dateTimeConversionService.FromEpochSeconds(
+                dateTimeConversionRequest.Ticks,
+                dateTimeConversionRequest.TimeZoneId
+                );
+            return Ok(new DateTimeConversionResponse
+            {
+                DateTime = dateTime,
+                TimeZoneId = dateTimeConversionRequest.TimeZoneId,
+                Ticks = dateTimeConversionRequest.Ticks
+            });
+        }
+
         [HttpGet]
         [Route("supported-timezones")]
         public IActionResult GetSupportedTimeZones()
