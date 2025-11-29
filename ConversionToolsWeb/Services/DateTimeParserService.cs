@@ -23,37 +23,41 @@
             {
                 throw new FormatException("TimeSpan string must be in the format 'dd:hh:mm:ss' where all elements except seconds are optional.");
             }
-            if(parts.Any(part => !int.TryParse(part, out _)))
+            if( (parts.Length>1 && parts[..^1].Any(part => !int.TryParse(part, out _))) || ! double.TryParse(parts[^1], out _) )
             {
                 throw new FormatException("TimeSpan string contains invalid numeric values.");
             }
-            var numericParts = parts.Select(part => int.Parse(part)).ToArray();
+            var numericPartsExceptionSeconds = parts.Length > 1 ? parts[..^1].Select(s=>int.Parse(s)).ToArray() : Array.Empty<int>();
+            var secondsPart = double.Parse(parts[^1]);
 
-            int days = 0, hours = 0, minutes = 0, seconds = 0;
-            switch (numericParts.Length)
+            int days = 0, hours = 0, minutes = 0, seconds = 0, milliseconds = 0;
+            switch (parts.Length)
             {
                 case 4:
-                    days = numericParts[0];
-                    hours = numericParts[1];
-                    minutes = numericParts[2];
-                    seconds = numericParts[3];
+                    days = numericPartsExceptionSeconds[0];
+                    hours = numericPartsExceptionSeconds[1];
+                    minutes = numericPartsExceptionSeconds[2];
                     break;
                 case 3:
-                    hours = numericParts[0];
-                    minutes = numericParts[1];
-                    seconds = numericParts[2];
+                    hours = numericPartsExceptionSeconds[0];
+                    minutes = numericPartsExceptionSeconds[1];
                     break;
                 case 2:
-                    minutes = numericParts[0];
-                    seconds = numericParts[1];
+                    minutes = numericPartsExceptionSeconds[0];
                     break;
                 case 1:
-                    seconds = numericParts[0];
                     break;
                 default:
                     throw new FormatException("Invalid TimeSpan parts count.");
             }
-            return new TimeSpan(days, hours, minutes, seconds);
+            ParseFractionalSeconds(secondsPart, out seconds, out milliseconds);
+            return new TimeSpan(days, hours, minutes, seconds, milliseconds);
+        }
+
+        private static void ParseFractionalSeconds(double totalSeconds, out int seconds, out int milliseconds)
+        {
+            seconds = (int)Math.Floor(totalSeconds);
+            milliseconds = (int)((totalSeconds - seconds) * 1000);
         }
     }
 }
