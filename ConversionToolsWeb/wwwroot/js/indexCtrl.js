@@ -42,6 +42,13 @@ function _getControlIds(convertType) {
     }
 }
 
+function convertTicks(dateTime, timzoneId) {
+    let controlIds = _getControlIds(convertTypes.Ticks);
+    $(controlIds.date).val(dateTime);
+    $(controlIds.tz).val(timzoneId);
+    convert(convertTypes.Ticks);
+}
+
 function convert(convertType) {
 
     let controlIds = _getControlIds(convertType);
@@ -109,7 +116,12 @@ function getNows() {
         data.forEach(function (item, idx) {
             let newRow = $("<div>").addClass("grid").appendTo(nowElement);
             $("<div>").text(item.timeZoneId).appendTo(newRow);
-            $("<div>").text(item.dateTime).appendTo(newRow);
+            const nowDiv = $("<div>").appendTo(newRow);
+            $("<a>")
+                .attr("href", "javascript:void(0);")
+                .text(item.dateTime)
+                .click(function () { convertTicks(item.dateTime, item.timeZoneId); })
+            .appendTo(nowDiv);
         });
     };
     makeGetRequest("/api/now",nowRoutine);
