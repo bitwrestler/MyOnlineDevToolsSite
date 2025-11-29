@@ -106,6 +106,13 @@ footer div {
     margin: 10pt;
 }
 
+.copy-to-clipboard {
+    cursor: pointer;
+    margin-right: 6px;
+    width: 18px;
+    height: 18px;
+}
+
 /* small utility for the "Now" row: place title and refresh icon side-by-side */
 .now-row {
     display: flex;

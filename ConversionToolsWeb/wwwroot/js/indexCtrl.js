@@ -123,7 +123,8 @@ function getNows() {
             const copyClipboard = $("<span>").appendTo(nowDiv);
             $("<img>")
                 .attr("src", "/copy.png")
-                .css({ cursor: "pointer", marginRight: "6px", width: "18", height: "18" })
+                .attr("title", "Copy to clipboard: " + item.dateTime)
+                .addClass("copy-to-clipboard")
                 .click(function () {
                     copyToClipboard(item.dateTime);
                 })
