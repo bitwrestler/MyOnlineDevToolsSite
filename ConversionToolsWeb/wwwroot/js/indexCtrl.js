@@ -38,7 +38,7 @@ function _getControlIds(convertType) {
         case convertTypes.TimeSpan:
             return { numeric: "#timespanTicksEntry", date: "#timespanDateEntry", tz: null, button: "#timespanConvertButton" };
         default:
-            return { numeric: "#ticksEntry", date: "#dateEntry", button: "#convertButton" };
+            return { numeric: "#ticksEntry", date: "#dateEntry", tz: "#timeZoneSelect", button: "#convertButton" };
     }
 }
 
