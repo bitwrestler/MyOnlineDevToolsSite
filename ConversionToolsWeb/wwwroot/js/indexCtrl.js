@@ -112,6 +112,7 @@ function checkEnableConvert(controlIds) {
 }
 
 function getNows() {
+    //TODO isn't there some sort of template system I use?
     let nowRoutine = function (data) {
         const nowElement = $("#nowResult");
         nowElement.empty();
