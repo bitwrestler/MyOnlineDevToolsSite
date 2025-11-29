@@ -1,21 +1,17 @@
 ﻿const convertTypes = { Ticks: 1, Unix: 2, TimeSpan : 3 };
 
-let lastResultControl = null;
-
 document.addEventListener('DOMContentLoaded', function () {
     let possibleControls = Object.values(convertTypes);
 
     for (let i = 0; i < possibleControls.length; i++) {
         let controlIds = _getControlIds(possibleControls[i]);
         $(controlIds.date).change(function () {
-            lastResultControl = controlIds.date;
             if ($(controlIds.date).val()) {
                 $(controlIds.numeric).val('');
             }
             evalEnableConvert(controlIds);
         });
         $(controlIds.numeric).change(function () {
-            lastResultControl = controlIds.date;
             if ($(controlIds.numeric).val()) {
                 $(controlIds.date).val('');
             }
@@ -23,6 +19,14 @@ document.addEventListener('DOMContentLoaded', function () {
         });
         evalEnableConvert(controlIds);
     }
+
+    // Allow double-click on any input in the form to clear its own value.
+    // Use delegated handler so it works for inputs that may be added/changed later.
+    $(document).on('dblclick', '#convertForm input[type="text"], #convertForm input[type="number"]', function (e) {
+        $(this).val('');
+        evalEnableConvertAll();
+    });
+
     getNows();
 
 });
@@ -81,6 +85,13 @@ function convertTicksToDate(convertType, ticksStr, timeZone,callback) {
             url = "/api/timespan/from-ticks";
     }
     makePostRequest(url, model, callback);
+}
+
+function evalEnableConvertAll() {
+    for (const convertType of Object.values(convertTypes)) {
+        const controlIds = _getControlIds(convertType);
+        evalEnableConvert(controlIds);
+    }
 }
 
 function evalEnableConvert(controlIds) {

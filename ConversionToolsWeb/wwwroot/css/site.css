@@ -120,3 +120,54 @@ footer div {
     height: 22px;
     width: 22px;
 }
+
+.info-row {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem; /* space between the title and the icon */
+    padding-bottom: 1rem;
+}
+
+    .info-row img {
+        display: block;
+        height: 22px;
+        width: 22px;
+        transform: translateY(-10px);
+    }
+
+/* tooltip wrapper: keep it plain (no bg or padding that would show behind icon) */
+.tooltip {
+    position: relative;
+    display: inline-block;
+    cursor: pointer;
+    background: transparent; /* IMPORTANT: remove any visible box */
+    padding: 0; /* IMPORTANT: remove extra footprint */
+    border: 0;
+    outline: none;
+}
+
+    /* tooltip text only appears in the pseudo-element (on hover/focus) */
+    .tooltip::after {
+        content: attr(data-tip);
+        position: absolute;
+        left: 50%;
+        top: calc(100% + 0.4rem);
+        transform: translate(-50%, 6px);
+        white-space: nowrap;
+        background: rgba(0,0,0,0.85);
+        color: #fff;
+        padding: 0.25rem 0.5rem;
+        border-radius: 0.25rem;
+        font-size: 0.85rem;
+        opacity: 0;
+        pointer-events: none;
+        transition: opacity 120ms ease, transform 120ms ease;
+        z-index: 50;
+    }
+
+    /* show only on hover/focus */
+    .tooltip:hover::after,
+    .tooltip:focus::after {
+        opacity: 1;
+        transform: translate(-50%, 0);
+    }
