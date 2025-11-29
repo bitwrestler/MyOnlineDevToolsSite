@@ -27,7 +27,7 @@ namespace ConversionToolsWeb.Controllers
                 return BadRequest("TimeZoneId is required.");
             }
 
-            var dateTime = _dateTimeParserService.Parse(dateTimeConversionRequest.DateTime);
+            var dateTime = _dateTimeParserService.ParseDateTime(dateTimeConversionRequest.DateTime);
 
             var ticks = _dateTimeConversionService.ToTicks(
                 dateTime,
@@ -71,7 +71,7 @@ namespace ConversionToolsWeb.Controllers
                 return BadRequest("TimeZoneId is required.");
             }
 
-            var dateTime = _dateTimeParserService.Parse(dateTimeConversionRequest.DateTime);
+            var dateTime = _dateTimeParserService.ParseDateTime(dateTimeConversionRequest.DateTime);
 
             var ticks = _dateTimeConversionService.ToEpochSeconds(
                 dateTime,
@@ -102,6 +102,31 @@ namespace ConversionToolsWeb.Controllers
             {
                 DateTime = dateTime,
                 TimeZoneId = dateTimeConversionRequest.TimeZoneId,
+                Ticks = dateTimeConversionRequest.Ticks
+            });
+        }
+
+        [Route("timespan/to-ticks")]
+        [HttpPost]
+        public IActionResult ConvertTimespanToTicks([FromBody] DateTimeConversionRequest dateTimeConversionRequest)
+        {
+            var ticks = _dateTimeConversionService.TimeSpanToTicks(dateTimeConversionRequest.DateTime);
+
+            return Ok(new TimeSpanConversionReponse
+            {
+                DateTime = _dateTimeParserService.ParseTimeSpan(dateTimeConversionRequest.DateTime),
+                Ticks = ticks
+            });
+        }
+
+        [Route("timespan/from-ticks")]
+        [HttpPost]
+        public IActionResult ConvertTicksToTimespan([FromBody] DateTimeConversionRequest dateTimeConversionRequest)
+        {
+            var timeSpan = _dateTimeConversionService.TicksToTimeSpan(dateTimeConversionRequest.Ticks);
+            return Ok(new TimeSpanConversionReponse
+            {
+                DateTime = timeSpan,
                 Ticks = dateTimeConversionRequest.Ticks
             });
         }

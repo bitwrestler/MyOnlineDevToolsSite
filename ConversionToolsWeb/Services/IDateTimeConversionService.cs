@@ -11,5 +11,8 @@ namespace ConversionToolsWeb.Services
         long ToEpochSeconds(string dateTime, string timeZoneId);
         long ToEpochSeconds(DateTime dateTime, string timeZoneId);
         DateTime FromEpochSeconds(long epochSeconds, string timeZoneId);
+
+        long TimeSpanToTicks(string? timeSpanString);
+        TimeSpan TicksToTimeSpan(long ticks);
     }
 }

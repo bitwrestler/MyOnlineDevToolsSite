@@ -13,7 +13,7 @@ namespace ConversionToolsWeb.Services
 
         public long ToTicks(string dateTime, string timeZoneId)
         {
-            return ToTicks(_dateTimeParserService.Parse(dateTime), timeZoneId);
+            return ToTicks(_dateTimeParserService.ParseDateTime(dateTime), timeZoneId);
         }
 
         public long ToTicks(DateTime dateTime, string timeZoneId)
@@ -29,7 +29,7 @@ namespace ConversionToolsWeb.Services
 
         public long ToEpochSeconds(string dateTime, string timeZoneId)
         {
-            return ToEpochSeconds(_dateTimeParserService.Parse(dateTime), timeZoneId);
+            return ToEpochSeconds(_dateTimeParserService.ParseDateTime(dateTime), timeZoneId);
         }
 
         public long ToEpochSeconds(DateTime dateTime, string timeZoneId)
@@ -43,6 +43,15 @@ namespace ConversionToolsWeb.Services
         {
             var utcDateTime = DateTimeOffset.FromUnixTimeSeconds(epochSeconds).UtcDateTime;
             return TimeZoneInfo.ConvertTime(utcDateTime, TimeZoneInfo.FindSystemTimeZoneById(timeZoneId));
+        }
+
+        public long TimeSpanToTicks(string? timeSpanString)
+        {
+            return _dateTimeParserService.ParseTimeSpan(timeSpanString).Ticks;
+        }
+        public TimeSpan TicksToTimeSpan(long ticks)
+        {
+            return new TimeSpan(ticks);
         }
 
         public DateTime GetNow(TimeZoneInfo timeZone)

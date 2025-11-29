@@ -24,7 +24,7 @@
 />
         </div>
         <div>
-            <input id="convertButton" type="button" value="Convert Ticks" onclick="javascript:convert(true)"/>
+            <input id="convertButton" type="button" value="Convert Ticks" onclick="javascript:convert(convertTypes.Ticks)"/>
         </div>
     </div>
     <div class="grid">
@@ -38,9 +38,19 @@
                        param-Name=@("unixTimeZoneSelect") />
         </div>
         <div>
-            <input id="unixConvertButton" type="button" value="Convert Unix Epoch" onclick="javascript:convert(false)" />
+            <input id="unixConvertButton" type="button" value="Convert Unix Epoch" onclick="javascript:convert(convertTypes.Unix)" />
         </div>
     </div>
+
+    <div class="grid">
+        <div><input type="text" id="timespanDateEntry" name="timespanDateEntry" placeholder="TimeSpan (DD:HH:MM:SS)" aria-label="TimeSpan:"></div>
+        <div><input type="number" id="timespanTicksEntry" name="timespanTicksEntry" placeholder="Ticks" aria-label="Ticks:"></div>
+        <div></div>
+        <div>
+            <input id="timespanConvertButton" type="button" value="Convert TimeSpan" onclick="javascript:convert(convertTypes.TimeSpan)" />
+        </div>
+    </div>
+
     <br />
     <div class="now-row">
         <h2>Now</h2>

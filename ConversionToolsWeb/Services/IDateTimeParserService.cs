@@ -3,6 +3,7 @@ namespace ConversionToolsWeb.Services
 {
     public interface IDateTimeParserService
     {
-        DateTime Parse(string? dateTimeString);
+        DateTime ParseDateTime(string? dateTimeString);
+        TimeSpan ParseTimeSpan(string? timeSpanString);
     }
 }

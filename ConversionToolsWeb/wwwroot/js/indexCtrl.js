@@ -1,4 +1,6 @@
-﻿let lastResultControl = null;
+﻿const convertTypes = { Ticks: 1, Unix: 2, TimeSpan : 3 };
+
+let lastResultControl = null;
 
 document.addEventListener('DOMContentLoaded', function () {
     let possibleControls = [true, false];
@@ -25,42 +27,59 @@ document.addEventListener('DOMContentLoaded', function () {
 
 });
 
-function _getControlIds(ticksOrUnix) {
-    if (ticksOrUnix) {
-        return { numeric: "#ticksEntry", date: "#dateEntry", tz: "#timeZoneSelect", button: "#convertButton" };
-    } else {
-        return { numeric: "#unixEpochEntry", date: "#unixDateEntry", tz: "#unixTimeZoneSelect", button: "#unixConvertButton" };
+function _getControlIds(convertType) {
+    switch (convertType) {
+        case convertTypes.Unix:
+            return { numeric: "#unixEpochEntry", date: "#unixDateEntry", tz: "#unixTimeZoneSelect", button: "#unixConvertButton" };
+        case convertTypes.TimeSpan:
+            return { numeric: "#timespanTicksEntry", date: "#timespanDateEntry", tz: null, button: "#timespanConvertButton" };
+        default:
+            return { numeric: "#ticksEntry", date: "#dateEntry", button: "#convertButton" };
     }
 }
 
-function convert(ticksOrUnix) {
+function convert(convertType) {
 
-    let controlIds = _getControlIds(ticksOrUnix);
+    let controlIds = _getControlIds(convertType);
 
     if (!checkEnableConvert(controlIds)) {
         return;
     }
     let dateVal = $(controlIds.date).val().replace(/Z$/, "");
     let ticksVal = $(controlIds.numeric).val();
-    let timeZoneVal = $(controlIds.tz).val();
+    let timeZoneVal = $(controlIds.tz)?.val();
     if (dateVal) {
 
-        convertDateToTicks(ticksOrUnix, dateVal, timeZoneVal, function (data) { $(controlIds.numeric).val(data.ticks); });
+        convertDateToTicks(convertType, dateVal, timeZoneVal, function (data) { $(controlIds.numeric).val(data.ticks); });
     }
     else if (ticksVal) {
-        convertTicksToDate(ticksOrUnix, ticksVal, timeZoneVal, function (data) { $(controlIds.date).val(data.dateTime); });
+        convertTicksToDate(convertType, ticksVal, timeZoneVal, function (data) { $(controlIds.date).val(data.dateTime); });
     }
 }
 
-function convertDateToTicks(ticksOrUnix,  dateStr, timeZone, callback) {
+function convertDateToTicks(convertType,  dateStr, timeZone, callback) {
     let model = { DateTime: dateStr, TimeZoneId: timeZone };
-    let url = ticksOrUnix ? "/api/to-ticks" : "/api/to-unix";
+
+    var url = "/api/to-ticks";
+    switch (convertType) {
+        case convertTypes.Unix:
+            url = "/api/to-unix";
+        case convertTypes.TimeSpan:
+            url = "/api/timespan/to-ticks";
+    }
     makePostRequest(url, model, callback);
 }
 
-function convertTicksToDate(ticksOrUnix, ticksStr, timeZone,callback) {
+function convertTicksToDate(convertType, ticksStr, timeZone,callback) {
     let model = { Ticks: ticksStr, TimeZoneId: timeZone };
-    let url = ticksOrUnix ? "/api/from-ticks" : "/api/from-unix";
+
+    var url = "/api/from-ticks";
+    switch (convertType) {
+        case convertTypes.Unix:
+            url = "/api/from-unix";
+        case convertTypes.TimeSpan:
+            url = "/api/timespan/from-ticks";
+    }
     makePostRequest(url, model, callback);
 }
 
