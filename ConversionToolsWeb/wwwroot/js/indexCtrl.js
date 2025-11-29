@@ -3,7 +3,7 @@
 let lastResultControl = null;
 
 document.addEventListener('DOMContentLoaded', function () {
-    let possibleControls = [true, false];
+    let possibleControls = Object.values(convertTypes);
 
     for (let i = 0; i < possibleControls.length; i++) {
         let controlIds = _getControlIds(possibleControls[i]);
