@@ -44,8 +44,10 @@ function _getControlIds(convertType) {
 
 function convertTicks(dateTime, timzoneId) {
     let controlIds = _getControlIds(convertTypes.Ticks);
+    $(controlIds.numeric).val('');
     $(controlIds.date).val(dateTime);
     $(controlIds.tz).val(timzoneId);
+    evalEnableConvert(controlIds);
     convert(convertTypes.Ticks);
 }
 
@@ -117,11 +119,24 @@ function getNows() {
             let newRow = $("<div>").addClass("grid").appendTo(nowElement);
             $("<div>").text(item.timeZoneId).appendTo(newRow);
             const nowDiv = $("<div>").appendTo(newRow);
+
+            const copyClipboard = $("<span>").appendTo(nowDiv);
+            $("<img>")
+                .attr("src", "/copy.png")
+                .css({ cursor: "pointer", marginRight: "6px", width: "18", height: "18" })
+                .click(function () {
+                    copyToClipboard(item.dateTime);
+                })
+                .appendTo(copyClipboard)
+                ;
+
             $("<a>")
                 .attr("href", "javascript:void(0);")
                 .text(item.dateTime)
                 .click(function () { convertTicks(item.dateTime, item.timeZoneId); })
-            .appendTo(nowDiv);
+                .appendTo(nowDiv);
+
+            
         });
     };
     makeGetRequest("/api/now",nowRoutine);
