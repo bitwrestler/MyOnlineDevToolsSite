@@ -111,37 +111,28 @@ function checkEnableConvert(controlIds) {
     return !!($(controlIds.date).val() || $(controlIds.numeric).val());
 }
 
-function getNows() {
-    //TODO isn't there some sort of template system I use?
-    let nowRoutine = function (data) {
-        const nowElement = $("#nowResult");
-        nowElement.empty();
-        data.forEach(function (item, idx) {
-            let newRow = $("<div>").addClass("grid").appendTo(nowElement);
-            $("<div>").text(item.timeZoneId).appendTo(newRow);
-            const nowDiv = $("<div>").appendTo(newRow);
+async function getNows() {
+    const rowHtml = await loadTemplate('nowRow');
+    makeGetRequest("/api/now", function (data) {
+        const container = $("#nowResult");
+        container.empty();
 
-            const copyClipboard = $("<span>").appendTo(nowDiv);
-            $("<img>")
-                .attr("src", "/copy.png")
+        data.forEach(item => {
+            const $row = $(rowHtml).clone();
+
+            $row.find(".__tz").text(item.timeZoneId);
+
+            $row.find(".__copy img")
                 .attr("title", "Copy to clipboard: " + item.dateTime)
-                .addClass("copy-to-clipboard")
-                .click(function () {
-                    copyToClipboard(item.dateTime);
-                })
-                .appendTo(copyClipboard)
-                ;
+                .click(() => copyToClipboard(item.dateTime));
 
-            $("<a>")
-                .attr("href", "javascript:void(0);")
+            $row.find(".__date-link")
                 .text(item.dateTime)
-                .click(function () { convertTicks(item.dateTime, item.timeZoneId); })
-                .appendTo(nowDiv);
+                .click(() => convertTicks(item.dateTime, item.timeZoneId));
 
-            
+            container.append($row);
         });
-    };
-    makeGetRequest("/api/now",nowRoutine);
+    });
 }
 
 function makeGetRequest(url, callback)

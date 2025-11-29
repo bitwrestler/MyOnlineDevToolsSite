@@ -44,3 +44,6 @@ function copyToClipboard(text) {
     navigator.clipboard.writeText(text)
         .catch(err => console.error("Copy failed:", err));
 }
+async function loadTemplate(templateName) {
+    return await $.get("/templates/" + templateName + ".html");
+}
