@@ -51,6 +51,14 @@ function convertTicks(dateTime, timzoneId) {
     convert(convertTypes.Ticks);
 }
 
+function getConvertTypeString(convertType) {
+    var retValue = '';
+    Object.keys(convertTypes).forEach(key => {
+        if (convertType == convertTypes[key]) { retValue = key; }
+    });
+    return retValue;
+};
+
 function convert(convertType) {
 
     let controlIds = _getControlIds(convertType);
@@ -62,13 +70,13 @@ function convert(convertType) {
     let ticksVal = $(controlIds.numeric).val();
     let timeZoneVal = $(controlIds.tz)?.val();
     if (dateVal) {
-
         convertDateToTicks(convertType, dateVal, timeZoneVal, function (data) { $(controlIds.numeric).val(data.ticks); });
+        historyObject.addHistoryEntry({ convertTypeString: getConvertTypeString(convertType), convertType: convertType, datetime: dateVal, tz: timeZoneVal });
     }
     else if (ticksVal) {
         convertTicksToDate(convertType, ticksVal, timeZoneVal, function (data) { $(controlIds.date).val(data.dateTime); });
     }
-}
+};
 
 function convertDateToTicks(convertType,  dateStr, timeZone, callback) {
     let model = { DateTime: dateStr, TimeZoneId: timeZone };
@@ -81,7 +89,7 @@ function convertDateToTicks(convertType,  dateStr, timeZone, callback) {
             url = "/api/timespan/to-ticks";
     }
     makePostRequest(url, model, callback);
-}
+};
 
 function convertTicksToDate(convertType, ticksStr, timeZone,callback) {
     let model = { Ticks: ticksStr, TimeZoneId: timeZone };
@@ -94,22 +102,22 @@ function convertTicksToDate(convertType, ticksStr, timeZone,callback) {
             url = "/api/timespan/from-ticks";
     }
     makePostRequest(url, model, callback);
-}
+};
 
 function evalEnableConvertAll() {
     for (const convertType of Object.values(convertTypes)) {
         const controlIds = _getControlIds(convertType);
         evalEnableConvert(controlIds);
     }
-}
+};
 
 function evalEnableConvert(controlIds) {
     $(controlIds.button).prop('disabled', !checkEnableConvert(controlIds));
-}
+};
 
 function checkEnableConvert(controlIds) {
     return !!($(controlIds.date).val() || $(controlIds.numeric).val());
-}
+};
 
 async function getNows() {
     const rowHtml = await loadTemplate('nowRow');
@@ -142,33 +150,4 @@ async function getNows() {
             container.append($row);
         });
     });
-}
-
-function makeGetRequest(url, callback)
-{
-    _makeRequest(url, null, callback, "GET");
-}
-
-function makePostRequest(url, model, callback)
-{
-    _makeRequest(url, model, callback, "POST");
-}
-
-function _makeRequest(url, model, callback, requestType) {
-    let errorCallback = function (jqXHR, textStatus, errorThrown) {
-        console.log("ERROR", textStatus, errorThrown);
-        console.log(jqXHR);
-    };
-    if (model) {
-        model = JSON.stringify(model);
-    }
-    $.ajax({
-        url: url,
-        contentType: "application/json; charset=utf-8",
-        dataType: "json",
-        type: requestType,
-        data: model,
-        success: callback,
-        error: errorCallback
-    });
-}
+};

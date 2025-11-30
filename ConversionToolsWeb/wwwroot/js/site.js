@@ -43,7 +43,34 @@
 function copyToClipboard(text) {
     navigator.clipboard.writeText(text)
         .catch(err => console.error("Copy failed:", err));
-}
+};
 async function loadTemplate(templateName) {
     return await $.get("/templates/" + templateName + ".html");
-}
+};
+
+function makeGetRequest(url, callback) {
+    _makeRequest(url, null, callback, "GET");
+};
+
+function makePostRequest(url, model, callback) {
+    _makeRequest(url, model, callback, "POST");
+};
+
+function _makeRequest(url, model, callback, requestType) {
+    let errorCallback = function (jqXHR, textStatus, errorThrown) {
+        console.log("ERROR", textStatus, errorThrown);
+        console.log(jqXHR);
+    };
+    if (model) {
+        model = JSON.stringify(model);
+    }
+    $.ajax({
+        url: url,
+        contentType: "application/json; charset=utf-8",
+        dataType: "json",
+        type: requestType,
+        data: model,
+        success: callback,
+        error: errorCallback
+    });
+};

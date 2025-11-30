@@ -15,7 +15,13 @@
         <div><strong>Date/Time</strong></div>
         <div><strong>Numeric Value (UTC)</strong></div>
         <div><strong>TimeZone for Date</strong></div>
-		<div><strong>Action</strong></div>
+		<div>
+            <strong>Action</strong>
+            <a href="#" onclick="showHistoryModal()">history</a>
+            <component type="typeof(ConversionToolsWeb.Components.HistoryModal)"
+                       render-mode="Static"
+                       />
+        </div>
     </div>
 
     <div class="grid">
