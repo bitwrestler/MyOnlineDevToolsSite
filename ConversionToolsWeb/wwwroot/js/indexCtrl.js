@@ -119,12 +119,16 @@ async function getNows() {
 
         data.forEach(item => {
             const $row = $(rowHtml).clone();
+            const clipBoardCopyText = "Copy to clipboard: " + item.dateTime;
 
             $row.find(".__tz").text(item.timeZoneId);
 
             $row.find(".__copy img")
-                .attr("title", "Copy to clipboard: " + item.dateTime)
                 .click(() => copyToClipboard(item.dateTime));
+
+            $row.find(".__tooltip")
+                .attr("aria-label", clipBoardCopyText)
+                .attr("data-tip", clipBoardCopyText);
 
             $row.find(".__date-link")
                 .text(item.dateTime)
