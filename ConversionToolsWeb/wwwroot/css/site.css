@@ -21,6 +21,22 @@ body {
   margin-bottom: 60px;
 }
 
+footer {
+    overflow-x: hidden;
+}
+
+.flex-between {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-left: 2rem;
+    padding-right: 2rem;
+}
+
+    .flex-between > * {
+        min-width: 0;
+    }
+
 /* Responsive banner image (fits its container) */
 .site-banner {
     display: block; /* removes inline gaps */
@@ -103,7 +119,6 @@ footer div {
     height: 60px;
     line-height: 60px;
     background-color: #f5f5f5;
-    margin: 10pt;
 }
 
 .copy-to-clipboard {

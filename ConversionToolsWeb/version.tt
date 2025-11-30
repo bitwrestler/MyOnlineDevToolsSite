@@ -1,0 +1,16 @@
+﻿<#@ template debug="false" hostspecific="false" language="C#" #>
+<#@ assembly name="System.Core" #>
+<#@ import namespace="System.Linq" #>
+<#@ import namespace="System.Text" #>
+<#@ import namespace="System.Collections.Generic" #>
+<#@ output extension=".cs" #>
+<#
+	int major = 1;
+	int minor = 0;
+	string version = string.Format("{0}.{1}.{2}", major, minor, DateTime.UtcNow.ToString("yyyyMMddHHmm"));
+#>
+namespace ConversionToolsWeb;
+public static class VersionInfo
+{
+	public const string Version = "<#= version.ToString() #>";
+}
