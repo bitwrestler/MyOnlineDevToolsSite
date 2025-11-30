@@ -7,7 +7,14 @@
 <#
 	int major = 1;
 	int minor = 0;
-	string version = string.Format("{0}.{1}.{2}", major, minor, DateTime.UtcNow.ToString("yyyyMMddHHmm"));
+
+	const string buildNumberPersistFile = "build_number.txt";
+
+	var currentBuildNumber = int.Parse(System.IO.File.ReadAllText(buildNumberPersistFile));
+	var newBuildNumber = currentBuildNumber + 1;
+
+	string version = string.Format("{0}.{1}.{2:00000}.{3}", major, minor, newBuildNumber , DateTime.UtcNow.ToString("yyyyMMddHHmm"));
+	System.IO.File.WriteAllText(buildNumberPersistFile, newBuildNumber.ToString());
 #>
 namespace ConversionToolsWeb;
 public static class VersionInfo
