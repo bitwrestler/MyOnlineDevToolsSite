@@ -120,15 +120,20 @@ async function getNows() {
         data.forEach(item => {
             const $row = $(rowHtml).clone();
             const clipBoardCopyText = "Copy to clipboard: " + item.dateTime;
+            const linkConvertTest = "Convert " + item.dateTime + " (" + item.timeZoneId + ") to ticks";
 
             $row.find(".__tz").text(item.timeZoneId);
 
             $row.find(".__copy img")
                 .click(() => copyToClipboard(item.dateTime));
 
-            $row.find(".__tooltip")
+            $row.find(".__tooltipcopy")
                 .attr("aria-label", clipBoardCopyText)
                 .attr("data-tip", clipBoardCopyText);
+
+            $row.find(".__tooltipnow")
+                .attr("aria-label", linkConvertTest)
+                .attr("data-tip", linkConvertTest);
 
             $row.find(".__date-link")
                 .text(item.dateTime)
