@@ -59,6 +59,15 @@ function getConvertTypeString(convertType) {
     return retValue;
 };
 
+function convertWithData(convertType, dateStr, ticksStr, timeZone) {
+    let controlIds = _getControlIds(convertType);
+    $(controlIds.numeric).val(ticksStr);
+    $(controlIds.date).val(dateStr);
+    $(controlIds.tz).val(timeZone);
+    convert(convertType);
+    return false;
+}
+
 function convert(convertType) {
 
     let controlIds = _getControlIds(convertType);
@@ -66,16 +75,18 @@ function convert(convertType) {
     if (!checkEnableConvert(controlIds)) {
         return;
     }
+    //TODO move this replacement to the backend datetime parsing
     let dateVal = $(controlIds.date).val().replace(/Z$/, "");
     let ticksVal = $(controlIds.numeric).val();
     let timeZoneVal = $(controlIds.tz)?.val();
     if (dateVal) {
         convertDateToTicks(convertType, dateVal, timeZoneVal, function (data) { $(controlIds.numeric).val(data.ticks); });
-        historyObject.addHistoryEntry({ convertTypeString: getConvertTypeString(convertType), convertType: convertType, datetime: dateVal, tz: timeZoneVal });
     }
     else if (ticksVal) {
         convertTicksToDate(convertType, ticksVal, timeZoneVal, function (data) { $(controlIds.date).val(data.dateTime); });
     }
+    historyObject.addHistoryEntry({ convertTypeString: getConvertTypeString(convertType), convertType: convertType, datetime: dateVal, tz: timeZoneVal, ticks: ticksVal });
+    return false;
 };
 
 function convertDateToTicks(convertType,  dateStr, timeZone, callback) {

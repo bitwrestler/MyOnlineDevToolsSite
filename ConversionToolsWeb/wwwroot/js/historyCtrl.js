@@ -10,15 +10,21 @@ const historyObject = {
         this._store(data);
     },
     entryExists: function (data, entry) {
+        var retValue = false;
         data.forEach((e, index) => {
-            if (entry.convertType === e.convertType && entry.datetime === e.datetime && entry.tz === e.tz) {
-                return true;
+            console.dir(data);
+            console.dir(entry);
+            if (entry.convertType === e.convertType && entry.datetime == e.datetime && entry.ticks == e.ticks && entry.tz == e.tz) {
+                retValue = true;
             }
         });
-        return false;
+        return retValue;
     },
     getHistoryEntries: function () {
         return this._retrieve() || [];
+    },
+    hasHistoryEntries: function () {
+        return (!!(this.getHistoryEntries().length > 0));
     },
     clearHistory: function () {
         this._store([]);
@@ -36,16 +42,26 @@ const historyObject = {
 };
 
 function showHistoryModal() {
+
+    if (! historyObject.hasHistoryEntries()) {
+        alert("No history.");
+        return;
+    }
+
     $(historyId).attr("open", '');
     let container = $('#historyCollectionContainer');
+    container.empty();
     historyObject.getHistoryEntries().forEach(entry => {
         loadTemplate('historyRow').then(rowHtml => {
             let thisTemplateRow = $(rowHtml).clone();
             thisTemplateRow.find(".__historyRow").click(function () {
-                //TODO : Implement re-populate of main form from history entry and close modal
+                convertWithData(entry.convertType, entry.datetime, entry.ticks, entry.tz);
+                $(historyId).removeAttr("open");
+                return false;
             });
             thisTemplateRow.find(".__historyRow").text(entry.convertTypeString + ": " + entry.datetime + " (" + entry.tz + ")");
             container.append(thisTemplateRow);
         });
     });
-}
+    return false;
+};

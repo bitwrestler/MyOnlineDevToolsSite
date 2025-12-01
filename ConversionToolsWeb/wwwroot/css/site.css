@@ -51,10 +51,6 @@ footer {
         width: 100vw;
         margin-left: calc(50% - 50vw);
         margin-right: calc(50% - 50vw);
-        /* optionally set a fixed height or min-height to control cropping:
-     height: 200px;
-     object-fit: cover;
-  */
     }
 
 /* Top-left overlay that sits on top of the banner image */
@@ -126,6 +122,14 @@ footer div {
     margin-right: 6px;
     width: 18px;
     height: 18px;
+}
+
+.icon {
+    width: 18px;
+    height: 18px;
+    margin-left: .25rem;
+    vertical-align: bottom;
+    transform: translateY(-4px);
 }
 
 /* small utility for the "Now" row: place title and refresh icon side-by-side */

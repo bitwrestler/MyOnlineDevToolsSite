@@ -6,7 +6,7 @@
 <form id="convertForm" method="post" class="pico">
     <div class="info-row">
         <h2>Conversion</h2>
-        <div class="tooltip" tabindex="0" role="button" aria-label="Double-click any input to clear its value" data-tip="Double-click any input to clear its value">
+        <div class="tooltip" role="button" aria-label="Double-click any input to clear its value" data-tip="Double-click any input to clear its value">
             <img src="icons8-info-48.png" alt="" height="22" width="22" />
         </div>
     </div>
@@ -17,7 +17,9 @@
         <div><strong>TimeZone for Date</strong></div>
 		<div>
             <strong>Action</strong>
-            <a href="#" onclick="showHistoryModal()">history</a>
+            <div class="tooltip" role="button" aria-label="Recent history" data-tip="Recent history">
+                <img class="icon" src="/history-line-icon.png" onclick="showHistoryModal()" />
+            </div>
             <component type="typeof(ConversionToolsWeb.Components.HistoryModal)"
                        render-mode="Static"
                        />
