@@ -87,11 +87,14 @@ function convertTicksToDate(convertType, ticksStr, timeZone,callback) {
     let model = { Ticks: ticksStr, TimeZoneId: timeZone };
 
     var url = "/api/from-ticks";
+    console.log("Convert type: " + convertType);
     switch (convertType) {
         case convertTypes.Unix:
             url = "/api/from-unix";
+            break;
         case convertTypes.TimeSpan:
             url = "/api/timespan/from-ticks";
+            break;
     }
     makePostRequest(url, model, callback);
 }
