@@ -37,6 +37,10 @@ footer {
         min-width: 0;
     }
 
+header a {
+    margin-left: 1rem;
+}
+
 /* Responsive banner image (fits its container) */
 .site-banner {
     display: block; /* removes inline gaps */
