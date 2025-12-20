@@ -16,8 +16,10 @@
 	string version = string.Format("{0}.{1}.{2:00000}.{3}", major, minor, newBuildNumber , DateTime.UtcNow.ToString("yyyyMMddHHmm"));
 	System.IO.File.WriteAllText(buildNumberPersistFile, newBuildNumber.ToString());
 #>
-namespace ConversionToolsWeb;
-public static class VersionInfo
+namespace ConversionToolsWeb
 {
-	public const string Version = "<#= version.ToString() #>";
+	public static class VersionInfo
+	{
+		public const string Version = "<#= version.ToString() #>";
+	}
 }
