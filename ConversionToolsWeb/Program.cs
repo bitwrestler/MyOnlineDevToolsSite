@@ -25,7 +25,6 @@ namespace ConversionToolsWeb
             app.UseSwaggerUI(); // Enable middleware to serve Swagger UI
 
 
-
             //app.UseSwaggerUI(options =>
             //{
             //    options.SwaggerEndpoint("/api/swagger/v1/swagger.json", "API V1");
