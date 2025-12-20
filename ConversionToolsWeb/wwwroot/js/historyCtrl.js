@@ -12,8 +12,6 @@ const historyObject = {
     entryExists: function (data, entry) {
         var retValue = false;
         data.forEach((e, index) => {
-            console.dir(data);
-            console.dir(entry);
             if (entry.convertType === e.convertType && entry.datetime == e.datetime && entry.ticks == e.ticks && entry.tz == e.tz) {
                 retValue = true;
             }
