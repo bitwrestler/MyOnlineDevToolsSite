@@ -7,29 +7,19 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <None Include="version.cs">
-      <DesignTime>True</DesignTime>
-      <AutoGen>True</AutoGen>
-      <DependentUpon>version.tt</DependentUpon>
-    </None>
-  </ItemGroup>
-
-  <ItemGroup>
     <PackageReference Include="Swashbuckle.AspNetCore" Version="10.1.0" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <None Update="version.tt">
-      <Generator>TextTemplatingFileGenerator</Generator>
-      <LastGenOutput>version.cs</LastGenOutput>
-    </None>
   </ItemGroup>
 
   <ItemGroup>
     <Service Include="{508349b6-6b84-4df5-91f0-309beebad82d}" />
   </ItemGroup>
 
-  <ItemGroup>
+  <ItemGroup Condition="'$(Configuration)' != 'Debug'">
+    <None Update="version.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>version.cs</LastGenOutput>
+    </None>
+
     <Compile Update="version.cs">
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>

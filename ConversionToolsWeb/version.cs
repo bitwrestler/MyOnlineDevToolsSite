@@ -1,5 +1,7 @@
-﻿namespace ConversionToolsWeb;
-public static class VersionInfo
+﻿namespace ConversionToolsWeb
 {
-	public const string Version = "1.0.00001.202511301400";
+	public static class VersionInfo
+	{
+		public const string Version = "1.0.00002.202512202153";
+	}
 }
