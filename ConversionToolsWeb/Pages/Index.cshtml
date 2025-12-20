@@ -1,81 +1,9 @@
 ﻿@page
 @model IndexModel
 @{
-    ViewData["Title"] = "DateTime Conversion Tools";
+    ViewData["Title"] = "Dev Tools";
 }
-<form id="convertForm" method="post" class="pico">
-    <div class="info-row">
-        <h2>Conversion</h2>
-        <div class="tooltip" tabindex="0" role="button" aria-label="Double-click any input to clear its value" data-tip="Double-click any input to clear its value">
-            <img src="icons8-info-48.png" alt="" height="22" width="22" />
-        </div>
-    </div>
-  
-    <div class="grid">
-        <div><strong>Date/Time</strong></div>
-        <div><strong>Numeric Value (UTC)</strong></div>
-        <div><strong>TimeZone for Date</strong></div>
-		<div><strong>Action</strong></div>
-    </div>
 
-    <div class="grid">
-        <div><input type="text" id="dateEntry" name="dateEntry" placeholder="Date/Time" aria-label="Date/Time:"></div>
-        <div><input type="number" id="ticksEntry" name="ticksEntry" placeholder="Ticks" aria-label="Ticks:"></div>
-        <div>
-            <component type="typeof(ConversionToolsWeb.Components.TimeZoneSelect)"
-                       render-mode="Static"
-                       param-TimeZones="Model.SupportedTimeZones"
-                       param-Id=@("timeZoneSelect")
-                       param-Name=@("timeZoneSelect")
+<component type="typeof(ConversionToolsWeb.Components.DateTimeTools)" 
+render-mode="Static"
 />
-        </div>
-        <div>
-            <input id="convertButton" type="button" value="Convert Ticks" onclick="javascript:convert(convertTypes.Ticks)"/>
-        </div>
-    </div>
-    <div class="grid">
-        <div><input type="text" id="unixDateEntry" name="unixDateEntry" placeholder="Date/Time" aria-label="Date/Time:"></div>
-        <div><input type="number" id="unixEpochEntry" name="unixEpochEntry" placeholder="Epoch Seconds" aria-label="Epoch Seconds:"></div>
-        <div>
-            <component type="typeof(ConversionToolsWeb.Components.TimeZoneSelect)"
-                       render-mode="Static"
-                       param-TimeZones="Model.SupportedTimeZones"
-                       param-Id=@("unixTimeZoneSelect")
-                       param-Name=@("unixTimeZoneSelect") />
-        </div>
-        <div>
-            <input id="unixConvertButton" type="button" value="Convert Unix Epoch" onclick="javascript:convert(convertTypes.Unix)" />
-        </div>
-    </div>
-
-    <div class="grid">
-        <div><input type="text" id="timespanDateEntry" name="timespanDateEntry" placeholder="TimeSpan (DD:HH:MM:SS)" aria-label="TimeSpan:"></div>
-        <div><input type="number" id="timespanTicksEntry" name="timespanTicksEntry" placeholder="Ticks" aria-label="Ticks:"></div>
-        <div></div>
-        <div>
-            <input id="timespanConvertButton" type="button" value="Convert TimeSpan" onclick="javascript:convert(convertTypes.TimeSpan)" />
-        </div>
-    </div>
-
-    <br />
-    <div class="now-row">
-        <h2>Now</h2>
-        <div class="tooltip" role="button" aria-label="Refresh Now() values" data-tip="Refresh Now() values">
-            <img src="refresh.png" alt="Refresh" height="22" width="22" onclick="getNows()"/>
-        </div>
-    </div>
-    <div class="grid">
-        <div><strong>TimeZone</strong></div>
-        <div><strong>Now</strong></div>
-    </div>
-
-    <span id="nowResult">
-
-    </span>
-
-</form>
-
-
-@section Scripts {
-    <script src="~/js/indexCtrl.js" asp-append-version="true"></script>
-}

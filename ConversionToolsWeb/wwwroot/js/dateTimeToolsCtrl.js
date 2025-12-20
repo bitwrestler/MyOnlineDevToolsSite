@@ -1,4 +1,5 @@
 ﻿const convertTypes = { Ticks: 1, Unix: 2, TimeSpan : 3 };
+const baseApiUrl = "/api/datetime";
 
 document.addEventListener('DOMContentLoaded', function () {
     let possibleControls = Object.values(convertTypes);
@@ -73,12 +74,12 @@ function convert(convertType) {
 function convertDateToTicks(convertType,  dateStr, timeZone, callback) {
     let model = { DateTime: dateStr, TimeZoneId: timeZone };
 
-    var url = "/api/to-ticks";
+    var url = _makeUrl("to-ticks");
     switch (convertType) {
         case convertTypes.Unix:
-            url = "/api/to-unix";
+            url = _makeUrl("to-unix");
         case convertTypes.TimeSpan:
-            url = "/api/timespan/to-ticks";
+            url = _makeUrl("timespan/to-ticks");
     }
     makePostRequest(url, model, callback);
 }
@@ -86,14 +87,14 @@ function convertDateToTicks(convertType,  dateStr, timeZone, callback) {
 function convertTicksToDate(convertType, ticksStr, timeZone,callback) {
     let model = { Ticks: ticksStr, TimeZoneId: timeZone };
 
-    var url = "/api/from-ticks";
+    var url = _makeUrl("from-ticks");
     console.log("Convert type: " + convertType);
     switch (convertType) {
         case convertTypes.Unix:
-            url = "/api/from-unix";
+            url = _makeUrl("from-unix");
             break;
         case convertTypes.TimeSpan:
-            url = "/api/timespan/from-ticks";
+            url = _makeUrl("timespan/from-ticks");
             break;
     }
     makePostRequest(url, model, callback);
@@ -116,7 +117,7 @@ function checkEnableConvert(controlIds) {
 
 async function getNows() {
     const rowHtml = await loadTemplate('nowRow');
-    makeGetRequest("/api/now", function (data) {
+    makeGetRequest(_makeUrl("now"), function (data) {
         const container = $("#nowResult");
         container.empty();
 
@@ -174,4 +175,8 @@ function _makeRequest(url, model, callback, requestType) {
         success: callback,
         error: errorCallback
     });
+}
+
+function _makeUrl(suffix) {
+    return baseApiUrl + "/" + suffix;
 }

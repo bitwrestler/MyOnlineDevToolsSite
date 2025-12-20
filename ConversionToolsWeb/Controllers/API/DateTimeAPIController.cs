@@ -2,9 +2,9 @@
 using ConversionToolsWeb.Services;
 using Microsoft.AspNetCore.Mvc;
 
-namespace ConversionToolsWeb.Controllers
+namespace ConversionToolsWeb.Controllers.API
 {
-    [Route("api")]
+    [Route("api/datetime")]
     public class DateTimeAPIController : Controller
     {
         private readonly IDateTimeConversionService _dateTimeConversionService;
