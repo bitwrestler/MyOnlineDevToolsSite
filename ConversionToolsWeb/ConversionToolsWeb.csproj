@@ -15,7 +15,7 @@
     <Service Include="{508349b6-6b84-4df5-91f0-309beebad82d}" />
   </ItemGroup>
 
-  <ItemGroup Condition="'$(Configuration)' != 'Debug'">
+  <ItemGroup Condition="'$(Configuration)' != 'Debug' And $(SUPPRESS_VERSION_BUMP) == ''">
     <None Update="version.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
       <LastGenOutput>version.cs</LastGenOutput>
