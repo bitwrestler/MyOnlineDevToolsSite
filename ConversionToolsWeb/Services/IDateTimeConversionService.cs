@@ -14,5 +14,6 @@ namespace ConversionToolsWeb.Services
 
         long TimeSpanToTicks(string? timeSpanString);
         TimeSpan TicksToTimeSpan(long ticks);
+        TimeSpan TicksDifference(long ticks1, long ticks2);
     }
 }

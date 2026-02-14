@@ -58,5 +58,12 @@ namespace ConversionToolsWeb.Services
         {
             return TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, timeZone);
         }
+
+        public TimeSpan TicksDifference(long ticks1, long ticks2)
+        {
+            long[] ticks = new long[] { ticks1, ticks2 };
+            ticks = ticks.OrderByDescending(t => t).ToArray();
+            return new TimeSpan(ticks[0] - ticks[1]);
+        }
     }
 }
