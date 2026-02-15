@@ -12,7 +12,8 @@
         evaluation: function () { standardEvaluation(3); }
     },
     TicksDifference: {
-        id: 4
+        id: 4,
+        evaluation: function () { ticksDifferenceEvaluation(4); }
     }
 };
 const baseApiUrl = "/api/datetime";
@@ -40,6 +41,18 @@ document.addEventListener('DOMContentLoaded', function () {
 
 function standardEvaluation(convertId) {
     _initConvertTypedEvalListener(_getConvertTypeById(convertId));
+};
+
+function ticksDifferenceEvaluation(convertId) {
+    let enableFunc = function (cids) { $(cids.button).prop('disabled', !($(cids.numeric).val() && $(cids.date).val()) ); };
+    let controlIds = _getControlIds(_getConvertTypeById(convertId));
+    $(controlIds.date).change(function () {
+        enableFunc(controlIds);
+    });
+    $(controlIds.numeric).change(function () {
+        enableFunc(controlIds);
+    });
+    enableFunc(controlIds);
 };
 
 function _getConvertTypeById(controlId) {
