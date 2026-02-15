@@ -1,24 +1,30 @@
-﻿const convertTypes = { Ticks: 1, Unix: 2, TimeSpan : 3 };
+﻿const convertTypes = {
+    Ticks: {
+        id: 1,
+        evaluation: function () { standardEvaluation(1); }
+    },
+    Unix: {
+        id: 2,
+        evaluation: function () { standardEvaluation(2); }
+    },
+    TimeSpan: {
+        id: 3,
+        evaluation: function () { standardEvaluation(3); }
+    },
+    TicksDifference: {
+        id: 4
+    }
+};
 const baseApiUrl = "/api/datetime";
 
 document.addEventListener('DOMContentLoaded', function () {
     let possibleControls = Object.values(convertTypes);
 
     for (let i = 0; i < possibleControls.length; i++) {
-        let controlIds = _getControlIds(possibleControls[i]);
-        $(controlIds.date).change(function () {
-            if ($(controlIds.date).val()) {
-                $(controlIds.numeric).val('');
-            }
-            evalEnableConvert(controlIds);
-        });
-        $(controlIds.numeric).change(function () {
-            if ($(controlIds.numeric).val()) {
-                $(controlIds.date).val('');
-            }
-            evalEnableConvert(controlIds);
-        });
-        evalEnableConvert(controlIds);
+        let evaluationFunc = possibleControls[i].evaluation;
+        if (evaluationFunc) {
+            evaluationFunc();
+        }
     }
 
     // Allow double-click on any input in the form to clear its own value.
@@ -32,12 +38,44 @@ document.addEventListener('DOMContentLoaded', function () {
 
 });
 
+function standardEvaluation(convertId) {
+    _initConvertTypedEvalListener(_getConvertTypeById(convertId));
+};
+
+function _getConvertTypeById(controlId) {
+    for (const [key, value] of Object.entries(convertTypes)) {
+        if (value.id === controlId) {
+            return value;
+        }
+    }
+    throw "Can not convert id " + controlId;
+};
+
+function _initConvertTypedEvalListener(convertType) {
+    let controlIds = _getControlIds(convertType);
+    $(controlIds.date).change(function () {
+        if ($(controlIds.date).val()) {
+            $(controlIds.numeric).val('');
+        }
+        evalEnableConvert(controlIds);
+    });
+    $(controlIds.numeric).change(function () {
+        if ($(controlIds.numeric).val()) {
+            $(controlIds.date).val('');
+        }
+        evalEnableConvert(controlIds);
+    });
+    evalEnableConvert(controlIds);
+};
+
 function _getControlIds(convertType) {
-    switch (convertType) {
-        case convertTypes.Unix:
+    switch (convertType.id) {
+        case convertTypes.Unix.id:
             return { numeric: "#unixEpochEntry", date: "#unixDateEntry", tz: "#unixTimeZoneSelect", button: "#unixConvertButton" };
-        case convertTypes.TimeSpan:
+        case convertTypes.TimeSpan.id:
             return { numeric: "#timespanTicksEntry", date: "#timespanDateEntry", tz: null, button: "#timespanConvertButton" };
+        case convertTypes.TicksDifference.id:
+            return { numeric: "#ticksDifference1", date: "#ticksDifference2", tz: null, button: "#ticksDifferenceConvertButton", result: "#ticksDifferenceResult" };
         default:
             return { numeric: "#ticksEntry", date: "#dateEntry", tz: "#timeZoneSelect", button: "#convertButton" };
     }
@@ -62,8 +100,9 @@ function convert(convertType) {
     let dateVal = $(controlIds.date).val().replace(/Z$/, "");
     let ticksVal = $(controlIds.numeric).val();
     let timeZoneVal = $(controlIds.tz)?.val();
-    if (dateVal) {
-
+    if (convertType.id === convertTypes.TicksDifference.id) {
+        convertTicksDifference(dateVal, ticksVal, function (data) { $(controlIds.result).val(data.dateTime); });
+    }  else if (dateVal) {
         convertDateToTicks(convertType, dateVal, timeZoneVal, function (data) { $(controlIds.numeric).val(data.ticks); });
     }
     else if (ticksVal) {
@@ -97,6 +136,12 @@ function convertTicksToDate(convertType, ticksStr, timeZone,callback) {
             url = _makeUrl("timespan/from-ticks");
             break;
     }
+    makePostRequest(url, model, callback);
+}
+
+function convertTicksDifference(ticks1, ticks2, callback) {
+    let model = { Ticks1: ticks1, Ticks2: ticks2 };
+    var url = _makeUrl("timespan/ticks-difference");
     makePostRequest(url, model, callback);
 }
 
