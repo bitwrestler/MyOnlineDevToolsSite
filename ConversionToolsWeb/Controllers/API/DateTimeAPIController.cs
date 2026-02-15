@@ -62,6 +62,14 @@ namespace ConversionToolsWeb.Controllers.API
             });
         }
 
+        [Route("timespan/ticks-difference")]
+        [HttpPost]
+        public IActionResult GetTicksDifference([FromBody] TicksDifferenceRequest ticksDifferenceRequest)
+        {
+            var result = _dateTimeConversionService.TicksDifference(ticksDifferenceRequest.Ticks1, ticksDifferenceRequest.Ticks2);
+            return Ok(new TimeSpanConversionReponse(){ DateTime = result, Ticks = result.Ticks });
+        }
+
         [Route("to-unix")]
         [HttpPost]
         public IActionResult ConvertToEpochSeconds([FromBody] DateTimeConversionRequest dateTimeConversionRequest)
