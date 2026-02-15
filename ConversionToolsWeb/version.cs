@@ -2,6 +2,6 @@
 {
 	public static class VersionInfo
 	{
-		public const string Version = "1.0.00007.202602140232";
+		public const string Version = "1.0.00008.202602150123";
 	}
 }
