@@ -17,7 +17,7 @@
     },
     TicksGreater: {
         id: 5,
-        evaluation: function () { ticksDifferenceEvaluation(5); }
+        evaluation: function () { ticksGreaterEvaluation(5); }
     }
 };
 const baseApiUrl = "/api/datetime";
@@ -31,16 +31,13 @@ document.addEventListener('DOMContentLoaded', function () {
             evaluationFunc();
         }
     }
-
     // Allow double-click on any input in the form to clear its own value.
     // Use delegated handler so it works for inputs that may be added/changed later.
     $(document).on('dblclick', '#convertForm input[type="text"], #convertForm input[type="number"]', function (e) {
         $(this).val('');
         evalEnableConvertAll();
     });
-
     getNows();
-
 });
 
 function standardEvaluation(convertId) {
@@ -49,7 +46,7 @@ function standardEvaluation(convertId) {
 
 function ticksDifferenceEvaluation(convertId) {
     let enableFunc = function (cids) { $(cids.button).prop('disabled', !($(cids.numeric).val() && $(cids.date).val()) ); };
-    let controlIds = _getControlIds(_getConvertTypeById(convertId));
+    let controlIds = _getControlIds(convertId);
     $(controlIds.date).change(function () {
         enableFunc(controlIds);
     });
@@ -58,6 +55,17 @@ function ticksDifferenceEvaluation(convertId) {
     });
     enableFunc(controlIds);
 };
+
+function ticksGreaterEvaluation(convertId) {
+    ticksDifferenceEvaluation(convertId);
+    let controlIds = _getControlIds(_getConvertTypeById(convertId));
+    var ctls = [$(controlIds.date), $(controlIds.numeric)];
+    console.dir(ctls);
+    for (const e of ctls) {
+        e.removeAttr("aria-invalid");
+    }
+}
+
 
 function _getConvertTypeById(controlId) {
     for (const [key, value] of Object.entries(convertTypes)) {
@@ -110,11 +118,10 @@ function convertTicks(dateTime, timzoneId) {
 }
 
 function _getCtlByVal(cids, data) {
+    ticksGreaterEvaluation(convertTypes.TicksGreater.id)
     var ctls = [cids.date, cids.numeric];
     for (const e of ctls) {
         const $el = $(e);
-        console.log($el);
-        console.log(data);
         if ($el.val() == data) {
             return $el;
         }
@@ -135,7 +142,12 @@ function convert(convertType) {
     if (convertType.id === convertTypes.TicksDifference.id) {
         convertTicksDifference(dateVal, ticksVal, function (data) { $(controlIds.result).val(data.dateTime); });
     } else if (convertType.id === convertTypes.TicksGreater.id) {
-        convertTicksGreater(dateVal, ticksVal, function (data) { let ctl = _getCtlByVal(controlIds, data); alert(ctl); } )
+        convertTicksGreater(dateVal, ticksVal, function (data) {
+            let ctl = _getCtlByVal(controlIds, data);
+            if (ctl) {
+                ctl.attr("aria-invalid", "false");
+            }
+        });
     } else if (dateVal) {
         convertDateToTicks(convertType, dateVal, timeZoneVal, function (data) { $(controlIds.numeric).val(data.ticks); });
     }
