@@ -70,6 +70,14 @@ namespace ConversionToolsWeb.Controllers.API
             return Ok(new TimeSpanConversionReponse(){ DateTime = result, Ticks = result.Ticks });
         }
 
+        [Route("ticks-greater")]
+        [HttpPost]
+        public IActionResult TicksGreater([FromBody] TicksDifferenceRequest ticksGreaterRequest)
+        {
+            var result = _dateTimeConversionService.TicksGreater(ticksGreaterRequest.Ticks1, ticksGreaterRequest.Ticks2);
+            return Ok(result);
+        }
+
         [Route("to-unix")]
         [HttpPost]
         public IActionResult ConvertToEpochSeconds([FromBody] DateTimeConversionRequest dateTimeConversionRequest)

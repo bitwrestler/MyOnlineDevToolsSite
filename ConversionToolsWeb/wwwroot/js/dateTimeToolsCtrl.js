@@ -14,6 +14,10 @@
     TicksDifference: {
         id: 4,
         evaluation: function () { ticksDifferenceEvaluation(4); }
+    },
+    TicksGreater: {
+        id: 5,
+        evaluation: function () { ticksDifferenceEvaluation(5); }
     }
 };
 const baseApiUrl = "/api/datetime";
@@ -89,6 +93,8 @@ function _getControlIds(convertType) {
             return { numeric: "#timespanTicksEntry", date: "#timespanDateEntry", tz: null, button: "#timespanConvertButton" };
         case convertTypes.TicksDifference.id:
             return { numeric: "#ticksDifference1", date: "#ticksDifference2", tz: null, button: "#ticksDifferenceConvertButton", result: "#ticksDifferenceResult" };
+        case convertTypes.TicksGreater.id:
+            return { numeric: "#ticksGreater1", date: "#ticksGreater2", tx: null, button: "#ticksGreaterConvertButton", result: null };
         default:
             return { numeric: "#ticksEntry", date: "#dateEntry", tz: "#timeZoneSelect", button: "#convertButton" };
     }
@@ -103,6 +109,19 @@ function convertTicks(dateTime, timzoneId) {
     convert(convertTypes.Ticks);
 }
 
+function _getCtlByVal(cids, data) {
+    var ctls = [cids.date, cids.numeric];
+    for (const e of ctls) {
+        const $el = $(e);
+        console.log($el);
+        console.log(data);
+        if ($el.val() == data) {
+            return $el;
+        }
+    }
+    return null;
+}
+
 function convert(convertType) {
 
     let controlIds = _getControlIds(convertType);
@@ -115,7 +134,9 @@ function convert(convertType) {
     let timeZoneVal = $(controlIds.tz)?.val();
     if (convertType.id === convertTypes.TicksDifference.id) {
         convertTicksDifference(dateVal, ticksVal, function (data) { $(controlIds.result).val(data.dateTime); });
-    }  else if (dateVal) {
+    } else if (convertType.id === convertTypes.TicksGreater.id) {
+        convertTicksGreater(dateVal, ticksVal, function (data) { let ctl = _getCtlByVal(controlIds, data); alert(ctl); } )
+    } else if (dateVal) {
         convertDateToTicks(convertType, dateVal, timeZoneVal, function (data) { $(controlIds.numeric).val(data.ticks); });
     }
     else if (ticksVal) {
@@ -155,6 +176,12 @@ function convertTicksToDate(convertType, ticksStr, timeZone,callback) {
 function convertTicksDifference(ticks1, ticks2, callback) {
     let model = { Ticks1: ticks1, Ticks2: ticks2 };
     var url = _makeUrl("timespan/ticks-difference");
+    makePostRequest(url, model, callback);
+}
+
+function convertTicksGreater(ticks1, ticks2, callback) {
+    let model = { Ticks1: ticks1, Ticks2: ticks2 };
+    var url = _makeUrl("ticks-greater");
     makePostRequest(url, model, callback);
 }
 

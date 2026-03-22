@@ -65,5 +65,16 @@ namespace ConversionToolsWeb.Services
             ticks = ticks.OrderByDescending(t => t).ToArray();
             return new TimeSpan(ticks[0] - ticks[1]);
         }
+
+        public long TicksGreater(long ticks1, long ticks2)
+        {
+            if (ticks1 == ticks2)
+            {
+                return 0;
+            } else
+            {
+                return ticks1 > ticks2 ? ticks1 : ticks2;
+            }
+        }
     }
 }
