@@ -36,6 +36,7 @@ document.addEventListener('DOMContentLoaded', function () {
     $(document).on('dblclick', '#convertForm input[type="text"], #convertForm input[type="number"]', function (e) {
         $(this).val('');
         evalEnableConvertAll();
+        ticksGreaterEvaluation(convertTypes.TicksGreater.id);
     });
     getNows();
 });
@@ -60,7 +61,6 @@ function ticksGreaterEvaluation(convertId) {
     ticksDifferenceEvaluation(convertId);
     let controlIds = _getControlIds(_getConvertTypeById(convertId));
     var ctls = [$(controlIds.date), $(controlIds.numeric)];
-    console.dir(ctls);
     for (const e of ctls) {
         e.removeAttr("aria-invalid");
     }
