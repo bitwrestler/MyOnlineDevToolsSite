@@ -8,7 +8,7 @@ EXPOSE 8080
 
 
 # This stage is used to build the service project
-FROM mcr.microsoft.com/dotnet/aspnet:10.0 AS build
+FROM mcr.microsoft.com/dotnet/sdk:10.0 AS build
 ENV SUPPRESS_VERSION_BUMP=1
 ARG BUILD_CONFIGURATION=Release
 WORKDIR /src
