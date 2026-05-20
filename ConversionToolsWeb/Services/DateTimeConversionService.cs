@@ -16,7 +16,7 @@
 
         public long ToTicks(DateTimeWithTimezone dateTimeWithTimezone)
         {
-            return TimeZoneInfo.ConvertTimeToUtc(dateTimeWithTimezone.DateTime, TimeZoneInfo.FindSystemTimeZoneById(dateTimeWithTimezone.TimeZone)).Ticks;
+            return TimeZoneInfo.ConvertTimeToUtc(dateTimeWithTimezone.DateTime, dateTimeWithTimezone.TimeZoneInfo).Ticks;
         }
 
         public DateTime FromTicks(long ticks, string timeZoneId)
@@ -32,7 +32,7 @@
 
         public long ToEpochSeconds(DateTimeWithTimezone dateTime)
         {
-            var utcDateTime = TimeZoneInfo.ConvertTimeToUtc(dateTime.DateTime, TimeZoneInfo.FindSystemTimeZoneById(dateTime.TimeZone));
+            var utcDateTime = TimeZoneInfo.ConvertTimeToUtc(dateTime.DateTime,dateTime.TimeZoneInfo);
             var dtOffset = new DateTimeOffset(utcDateTime);
             return dtOffset.ToUnixTimeSeconds();
         }
@@ -77,8 +77,11 @@
 
         public TimeSpan DateTimeDifference(DateTimeWithTimezone dt1, DateTimeWithTimezone dt2)
         {
-            //TODO implement
-            throw new NotImplementedException();
+            var d = new DateTime[2];
+            d[0] = dt1.ToUtc;
+            d[1] = dt2.ToUtc;
+            d.Sort();
+            return d[1] - d[0];
         }
     }
 }
