@@ -30,8 +30,7 @@ namespace ConversionToolsWeb.Controllers.API
             var dateTime = _dateTimeParserService.ParseDateTime(dateTimeConversionRequest.DateTime);
 
             var ticks = _dateTimeConversionService.ToTicks(
-                dateTime,
-                dateTimeConversionRequest.TimeZoneId
+                new DateTimeWithTimezone(dateTime, dateTimeConversionRequest.TimeZoneId)
                 );
 
             return Ok(new DateTimeConversionResponse
@@ -90,8 +89,7 @@ namespace ConversionToolsWeb.Controllers.API
             var dateTime = _dateTimeParserService.ParseDateTime(dateTimeConversionRequest.DateTime);
 
             var ticks = _dateTimeConversionService.ToEpochSeconds(
-                dateTime,
-                dateTimeConversionRequest.TimeZoneId
+                new DateTimeWithTimezone(dateTime, dateTimeConversionRequest.TimeZoneId)
                 );
 
             return Ok(new DateTimeConversionResponse

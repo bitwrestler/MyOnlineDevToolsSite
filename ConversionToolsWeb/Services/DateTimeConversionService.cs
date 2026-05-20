@@ -1,10 +1,8 @@
-﻿using ConversionToolsWeb.Models;
-
-namespace ConversionToolsWeb.Services
+﻿namespace ConversionToolsWeb.Services
 {
     public class DateTimeConversionService : IDateTimeConversionService
     {
-        private IDateTimeParserService _dateTimeParserService;
+        private readonly IDateTimeParserService _dateTimeParserService;
 
         public DateTimeConversionService(IDateTimeParserService dateTimeParserService)
         {
@@ -13,12 +11,12 @@ namespace ConversionToolsWeb.Services
 
         public long ToTicks(string dateTime, string timeZoneId)
         {
-            return ToTicks(_dateTimeParserService.ParseDateTime(dateTime), timeZoneId);
+            return ToTicks( new DateTimeWithTimezone(_dateTimeParserService.ParseDateTime(dateTime), timeZoneId) );
         }
 
-        public long ToTicks(DateTime dateTime, string timeZoneId)
+        public long ToTicks(DateTimeWithTimezone dateTimeWithTimezone)
         {
-            return TimeZoneInfo.ConvertTimeToUtc(dateTime, TimeZoneInfo.FindSystemTimeZoneById(timeZoneId)).Ticks;
+            return TimeZoneInfo.ConvertTimeToUtc(dateTimeWithTimezone.DateTime, TimeZoneInfo.FindSystemTimeZoneById(dateTimeWithTimezone.TimeZone)).Ticks;
         }
 
         public DateTime FromTicks(long ticks, string timeZoneId)
@@ -29,12 +27,12 @@ namespace ConversionToolsWeb.Services
 
         public long ToEpochSeconds(string dateTime, string timeZoneId)
         {
-            return ToEpochSeconds(_dateTimeParserService.ParseDateTime(dateTime), timeZoneId);
+            return ToEpochSeconds(new DateTimeWithTimezone(_dateTimeParserService.ParseDateTime(dateTime), timeZoneId));
         }
 
-        public long ToEpochSeconds(DateTime dateTime, string timeZoneId)
+        public long ToEpochSeconds(DateTimeWithTimezone dateTime)
         {
-            var utcDateTime = TimeZoneInfo.ConvertTimeToUtc(dateTime, TimeZoneInfo.FindSystemTimeZoneById(timeZoneId));
+            var utcDateTime = TimeZoneInfo.ConvertTimeToUtc(dateTime.DateTime, TimeZoneInfo.FindSystemTimeZoneById(dateTime.TimeZone));
             var dtOffset = new DateTimeOffset(utcDateTime);
             return dtOffset.ToUnixTimeSeconds();
         }
@@ -61,7 +59,7 @@ namespace ConversionToolsWeb.Services
 
         public TimeSpan TicksDifference(long ticks1, long ticks2)
         {
-            long[] ticks = new long[] { ticks1, ticks2 };
+            long[] ticks = [ticks1, ticks2];
             ticks = ticks.OrderByDescending(t => t).ToArray();
             return new TimeSpan(ticks[0] - ticks[1]);
         }
@@ -75,6 +73,12 @@ namespace ConversionToolsWeb.Services
             {
                 return ticks1 > ticks2 ? ticks1 : ticks2;
             }
+        }
+
+        public TimeSpan DateTimeDifference(DateTimeWithTimezone dt1, DateTimeWithTimezone dt2)
+        {
+            //TODO implement
+            throw new NotImplementedException();
         }
     }
 }
