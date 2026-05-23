@@ -217,8 +217,6 @@ function convertTicksGreater(ticks1, ticks2, callback) {
     makePostRequest(url, model, callback);
 }
 
-//TODO get enabling/diabling and clearing to work for date/time diff
-
 function convertDateTimeDiff(dt1,dt2,timeZone)
 {
     let ctrlData = _getControlIds(convertTypes.DateTimeDifference);
