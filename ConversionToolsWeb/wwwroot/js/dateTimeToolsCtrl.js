@@ -18,6 +18,10 @@
     TicksGreater: {
         id: 5,
         evaluation: function () { ticksGreaterEvaluation(5); }
+    },
+    DateTimeDifference: {
+        id : 6,
+        evaluation: function () { ticksDifferenceEvaluation(6); }
     }
 };
 const baseApiUrl = "/api/datetime";
@@ -102,7 +106,9 @@ function _getControlIds(convertType) {
         case convertTypes.TicksDifference.id:
             return { numeric: "#ticksDifference1", date: "#ticksDifference2", tz: null, button: "#ticksDifferenceConvertButton", result: "#ticksDifferenceResult" };
         case convertTypes.TicksGreater.id:
-            return { numeric: "#ticksGreater1", date: "#ticksGreater2", tx: null, button: "#ticksGreaterConvertButton", result: null };
+            return { numeric: "#ticksGreater1", date: "#ticksGreater2", tz: null, button: "#ticksGreaterConvertButton", result: null };
+        case convertTypes.DateTimeDifference.id:
+            return { numeric: "#dateTimeDiff1", date: "#dateTimeDiff2", tz:"#dateTimeDiffTimeZoneSelect", button:"#dateTimeDiffConvertButton", result:"#dateTimeDiffResult" };
         default:
             return { numeric: "#ticksEntry", date: "#dateEntry", tz: "#timeZoneSelect", button: "#convertButton" };
     }
@@ -140,7 +146,11 @@ function convert(convertType) {
     let ticksVal = $(controlIds.numeric).val();
     let timeZoneVal = $(controlIds.tz)?.val();
     if (convertType.id === convertTypes.TicksDifference.id) {
-        convertTicksDifference(dateVal, ticksVal, function (data) { $(controlIds.result).val(data.dateTime); });
+        convertTicksDifference(dateVal, ticksVal, function (data) {
+            $(controlIds.result).val(data.dateTime);
+        });
+    } else if (convertType.id === convertTypes.DateTimeDifference.id){
+        convertDateTimeDiff(dateVal,ticksVal, timeZoneVal);
     } else if (convertType.id === convertTypes.TicksGreater.id) {
         convertTicksGreater(dateVal, ticksVal, function (data) {
             let ctl = _getCtlByVal(controlIds, data);
@@ -195,6 +205,28 @@ function convertTicksGreater(ticks1, ticks2, callback) {
     let model = { Ticks1: ticks1, Ticks2: ticks2 };
     var url = _makeUrl("ticks-greater");
     makePostRequest(url, model, callback);
+}
+
+function convertDateTimeDiff(dt1,dt2,timeZone)
+{
+    let ctrlData = _getControlIds(convertTypes.DateTimeDifference);
+    let container = $(ctrlData.result);
+    container.empty();
+    let model = [{ dateTime:dt1, timeZoneId:timeZone }, { dateTime:dt2, timeZoneId:timeZone }];
+    loadTemplate('dateTimeDifferenceDisplay').then(
+        (rowHtml) => {
+            makePostRequest(_makeUrl("get-difference"), model , function (data) {
+                const $row = $(rowHtml).clone();
+                $row.find("__days").text(data.days);
+                $row.find("__hours").text(data.hours);
+                $row.find("__minutes").text(data.minutes);
+                $row.find("__seconds").text(data.seconds);
+                $row.find("__ticks").text(data.ticks);
+                console.log($row);
+                container.append($row);
+            });            
+        }
+    );
 }
 
 function evalEnableConvertAll() {
