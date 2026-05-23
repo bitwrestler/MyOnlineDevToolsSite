@@ -47,11 +47,11 @@ document.addEventListener('DOMContentLoaded', function () {
 
 function standardEvaluation(convertId) {
     _initConvertTypedEvalListener(_getConvertTypeById(convertId));
-};
+}
 
 function ticksDifferenceEvaluation(convertId) {
     let enableFunc = function (cids) { $(cids.button).prop('disabled', !($(cids.numeric).val() && $(cids.date).val()) ); };
-    let controlIds = _getControlIds(convertId);
+    let controlIds = _getControlIds(_getConvertTypeById(convertId));
     $(controlIds.date).change(function () {
         enableFunc(controlIds);
     });
@@ -59,7 +59,7 @@ function ticksDifferenceEvaluation(convertId) {
         enableFunc(controlIds);
     });
     enableFunc(controlIds);
-};
+}
 
 function ticksGreaterEvaluation(convertId) {
     ticksDifferenceEvaluation(convertId);
@@ -78,7 +78,7 @@ function _getConvertTypeById(controlId) {
         }
     }
     throw "Can not convert id " + controlId;
-};
+}
 
 function _initConvertTypedEvalListener(convertType) {
     let controlIds = _getControlIds(convertType);
@@ -95,7 +95,7 @@ function _initConvertTypedEvalListener(convertType) {
         evalEnableConvert(controlIds);
     });
     evalEnableConvert(controlIds);
-};
+}
 
 function _getControlIds(convertType) {
     switch (convertType.id) {
