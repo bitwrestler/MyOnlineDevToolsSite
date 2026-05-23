@@ -50,7 +50,14 @@ function standardEvaluation(convertId) {
 }
 
 function ticksDifferenceEvaluation(convertId) {
-    let enableFunc = function (cids) { $(cids.button).prop('disabled', !($(cids.numeric).val() && $(cids.date).val()) ); };
+    let enableFunc = function (cids) { 
+        let shouldDisable = !($(cids.numeric).val() && $(cids.date).val());
+        $(cids.button).prop('disabled', shouldDisable );
+        if(shouldDisable && cids.clear_result_func && cids.result)
+        {
+            cids.clear_result_func(cids.result);
+        }
+    };
     let controlIds = _getControlIds(_getConvertTypeById(convertId));
     $(controlIds.date).change(function () {
         enableFunc(controlIds);
@@ -108,7 +115,10 @@ function _getControlIds(convertType) {
         case convertTypes.TicksGreater.id:
             return { numeric: "#ticksGreater1", date: "#ticksGreater2", tz: null, button: "#ticksGreaterConvertButton", result: null };
         case convertTypes.DateTimeDifference.id:
-            return { numeric: "#dateTimeDiff1", date: "#dateTimeDiff2", tz:"#dateTimeDiffTimeZoneSelect", button:"#dateTimeDiffConvertButton", result:"#dateTimeDiffResult" };
+            return { 
+                numeric: "#dateTimeDiff1", date: "#dateTimeDiff2", tz:"#dateTimeDiffTimeZoneSelect", button:"#dateTimeDiffConvertButton", result:"#dateTimeDiffResult",
+                clear_result_func: function(resultId){ $(resultId).empty(); }
+            };
         default:
             return { numeric: "#ticksEntry", date: "#dateEntry", tz: "#timeZoneSelect", button: "#convertButton" };
     }
