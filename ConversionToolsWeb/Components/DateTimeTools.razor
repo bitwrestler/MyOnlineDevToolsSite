@@ -74,6 +74,28 @@
         </div>
     </div>
 
+    <div class="grid">
+        <div><strong>Date/Time</strong></div>
+        <div><strong>Date/Time</strong></div>
+        <div><strong>TimeZone</strong></div>
+        <div><strong>Result</strong></div>
+        <div></div>
+    </div>
+    
+    <div class="grid">
+        <div><input type="text" id="dateTimeDiff1" name="dateTimeDiff1" placeholder="Date/Time" aria-label="DateTime1:"></div>
+        <div><input type="text" id="dateTimeDiff2" name="dateTimeDiff2" placeholder="Date/Time" aria-label="DateTime2:"></div>
+        <div>
+            <TimeZoneSelect TimeZones="TimeZoneService.SupportedTimeZones"
+                            Id="dateTimeDiffTimeZoneSelect"
+                            Name="dateTimeDiffTimeZoneSelect" />
+        </div>
+        <div id="dateTimeDiffResult"></div>
+        <div>
+            <input id="dateTimeDiffConvertButton" type="button" value="Date/Time difference" onclick="javascript:convert(convertTypes.DateTimeDifference)" />
+        </div>
+    </div>
+    
     <br />
     <div class="now-row">
         <h2>Now</h2>
