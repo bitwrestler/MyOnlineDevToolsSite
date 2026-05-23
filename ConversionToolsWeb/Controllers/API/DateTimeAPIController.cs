@@ -167,7 +167,7 @@ namespace ConversionToolsWeb.Controllers.API
                 { TimeZoneId = s.Id, DateTime = _dateTimeConversionService.GetNow(s) }));
         }
 
-        [HttpGet]
+        [HttpPost]
         [Route("get-difference")]
         public IActionResult GetDifference([FromBody] IEnumerable<DateTimeConversionRequest> dateTimeConversionRequests)
         {
