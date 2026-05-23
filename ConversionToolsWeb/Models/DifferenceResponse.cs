@@ -1,11 +1,10 @@
 namespace ConversionToolsWeb.Models;
 
-public class DifferenceResponse
+public class DifferenceResponse(TimeSpan difference)
 {
-    public double Months { get; set; }
-    public double Days { get; set; }
-    public double Hours { get; set; }
-    public double Minutes { get; set; }
-    public double Seconds { get; set; }
-    public long Ticks { get; set; }
+    public double Days { get; init; } = difference.TotalDays;
+    public double Hours { get; init; } = difference.TotalHours;
+    public double Minutes { get; init; } = difference.TotalMinutes;
+    public double Seconds { get; init; } = difference.TotalSeconds;
+    public long Ticks { get; init; } = difference.Ticks;
 }
