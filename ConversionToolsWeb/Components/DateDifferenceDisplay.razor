@@ -3,15 +3,18 @@
 
 <h4>
     <pre>
-Days   : @(Difference.Days)
-Hours  : @(Difference.Hours)
-Minutes: @(Difference.Minutes)
-Seconds: @(Difference.Seconds)
-Ticks  : @(Difference.Ticks)
+@if (Difference != null) 
+{
+@:Days   : @Difference.Days
+@:Hours  : @Difference.Hours
+@:Minutes: @Difference.Minutes
+@:Seconds: @Difference.Seconds
+@:Ticks  : @Difference.Ticks
+}
     </pre>
 </h4>
 
 @code {
-    [Parameter] public required DifferenceResponse Difference { get; set; }
+    [Parameter] public DifferenceResponse? Difference { get; set; }
 }
 
