@@ -216,13 +216,13 @@ function convertDateTimeDiff(dt1,dt2,timeZone)
     loadTemplate('dateTimeDifferenceDisplay').then(
         (rowHtml) => {
             makePostRequest(_makeUrl("get-difference"), model , function (data) {
-                const $row = $(rowHtml).clone();
-                $row.find("__days").text(data.days);
-                $row.find("__hours").text(data.hours);
-                $row.find("__minutes").text(data.minutes);
-                $row.find("__seconds").text(data.seconds);
-                $row.find("__ticks").text(data.ticks);
-                console.log($row);
+                let updatedHtml = rowHtml
+                    .replaceAll("__days", data.days)
+                    .replaceAll("__hours", data.hours)
+                    .replaceAll("__minutes", data.minutes)
+                    .replaceAll("__seconds", data.seconds)
+                    .replaceAll("__ticks", data.ticks);
+                const $row = $(updatedHtml);
                 container.append($row);
             });            
         }
