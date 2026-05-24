@@ -11,7 +11,8 @@ namespace ConversionToolsWeb.Controllers.API
         private readonly IDateTimeParserService _dateTimeParserService;
         private readonly ITimeZoneInfoResolver _timeZoneInfoResolver;
 
-        public DateTimeAPIController(IDateTimeConversionService dateTimeConversionService, IDateTimeParserService dateTimeParserService, ITimeZoneInfoResolver timeZoneInfoResolver)
+        public DateTimeAPIController(IDateTimeConversionService dateTimeConversionService,
+            IDateTimeParserService dateTimeParserService, ITimeZoneInfoResolver timeZoneInfoResolver)
         {
             _dateTimeConversionService = dateTimeConversionService;
             _dateTimeParserService = dateTimeParserService;
@@ -30,9 +31,8 @@ namespace ConversionToolsWeb.Controllers.API
             var dateTime = _dateTimeParserService.ParseDateTime(dateTimeConversionRequest.DateTime);
 
             var ticks = _dateTimeConversionService.ToTicks(
-                dateTime,
-                dateTimeConversionRequest.TimeZoneId
-                );
+                new DateTimeWithTimezone(dateTime, dateTimeConversionRequest.TimeZoneId)
+            );
 
             return Ok(new DateTimeConversionResponse
             {
@@ -50,10 +50,11 @@ namespace ConversionToolsWeb.Controllers.API
             {
                 return BadRequest("TimeZoneId is required.");
             }
+
             var dateTime = _dateTimeConversionService.FromTicks(
                 dateTimeConversionRequest.Ticks,
                 dateTimeConversionRequest.TimeZoneId
-                );
+            );
             return Ok(new DateTimeConversionResponse
             {
                 DateTime = dateTime,
@@ -66,15 +67,18 @@ namespace ConversionToolsWeb.Controllers.API
         [HttpPost]
         public IActionResult GetTicksDifference([FromBody] TicksDifferenceRequest ticksDifferenceRequest)
         {
-            var result = _dateTimeConversionService.TicksDifference(ticksDifferenceRequest.Ticks1, ticksDifferenceRequest.Ticks2);
-            return Ok(new TimeSpanConversionReponse(){ DateTime = result, Ticks = result.Ticks });
+            var result =
+                _dateTimeConversionService.TicksDifference(ticksDifferenceRequest.Ticks1,
+                    ticksDifferenceRequest.Ticks2);
+            return Ok(new TimeSpanConversionReponse() { DateTime = result, Ticks = result.Ticks });
         }
 
         [Route("ticks-greater")]
         [HttpPost]
         public IActionResult TicksGreater([FromBody] TicksDifferenceRequest ticksGreaterRequest)
         {
-            var result = _dateTimeConversionService.TicksGreater(ticksGreaterRequest.Ticks1, ticksGreaterRequest.Ticks2);
+            var result =
+                _dateTimeConversionService.TicksGreater(ticksGreaterRequest.Ticks1, ticksGreaterRequest.Ticks2);
             return Ok(result);
         }
 
@@ -90,9 +94,8 @@ namespace ConversionToolsWeb.Controllers.API
             var dateTime = _dateTimeParserService.ParseDateTime(dateTimeConversionRequest.DateTime);
 
             var ticks = _dateTimeConversionService.ToEpochSeconds(
-                dateTime,
-                dateTimeConversionRequest.TimeZoneId
-                );
+                new DateTimeWithTimezone(dateTime, dateTimeConversionRequest.TimeZoneId)
+            );
 
             return Ok(new DateTimeConversionResponse
             {
@@ -110,10 +113,11 @@ namespace ConversionToolsWeb.Controllers.API
             {
                 return BadRequest("TimeZoneId is required.");
             }
+
             var dateTime = _dateTimeConversionService.FromEpochSeconds(
                 dateTimeConversionRequest.Ticks,
                 dateTimeConversionRequest.TimeZoneId
-                );
+            );
             return Ok(new DateTimeConversionResponse
             {
                 DateTime = dateTime,
@@ -159,7 +163,45 @@ namespace ConversionToolsWeb.Controllers.API
         [Route("now")]
         public IActionResult GetNows()
         {
-            return Ok(_timeZoneInfoResolver.SupportedTimeZoneInfos.Select(s => new NowResponse() { TimeZoneId = s.Id , DateTime = _dateTimeConversionService.GetNow(s) } ));
+            return Ok(_timeZoneInfoResolver.SupportedTimeZoneInfos.Select(s => new NowResponse()
+                { TimeZoneId = s.Id, DateTime = _dateTimeConversionService.GetNow(s) }));
+        }
+
+        [HttpPost]
+        [Route("get-difference")]
+        public IActionResult GetDifference([FromBody] IEnumerable<DateTimeConversionRequest> dateTimeConversionRequests)
+        {
+            var l = dateTimeConversionRequests.ToArray();
+            if (l.Length < 2)
+            {
+                return BadRequest("Two dates are required for Date Difference");
+            }
+
+            DateTimeWithTimezone r1;
+            DateTimeWithTimezone r2;
+
+            try
+            {
+                r1 = ConvertToDateTimeWithTimeZone(l[0]);
+                r2 = ConvertToDateTimeWithTimeZone(l[1]);
+            }
+            catch (Exception ee)
+            {
+                return BadRequest(ee.Message);
+            }
+            var ts = _dateTimeConversionService.DateTimeDifference(r1,r2);
+            return Ok(new DifferenceResponse(ts));
+        }
+
+        private DateTimeWithTimezone ConvertToDateTimeWithTimeZone(DateTimeConversionRequest request)
+        {
+            var d = _dateTimeParserService.ParseDateTime(request.DateTime);
+            if (string.IsNullOrWhiteSpace(request.TimeZoneId))
+            {
+                throw new Exception("TimeZoneId is required.");
+            }
+            return new DateTimeWithTimezone(d, request.TimeZoneId);
         }
     }
 }
+
