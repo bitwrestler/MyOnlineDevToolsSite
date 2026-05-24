@@ -24,7 +24,7 @@
         evaluation: function () { ticksDifferenceEvaluation(6); }
     }
 };
-const baseApiUrl = "/api/datetime";
+const urlBuilder = new ApiUrlBuilder('api/datetime');
 
 document.addEventListener('DOMContentLoaded', function () {
     let possibleControls = Object.values(convertTypes);
@@ -179,12 +179,12 @@ function convert(convertType) {
 function convertDateToTicks(convertType,  dateStr, timeZone, callback) {
     let model = { DateTime: dateStr, TimeZoneId: timeZone };
 
-    var url = _makeUrl("to-ticks");
+    var url = urlBuilder("to-ticks");
     switch (convertType) {
         case convertTypes.Unix:
-            url = _makeUrl("to-unix");
+            url =   urlBuilder("to-unix");
         case convertTypes.TimeSpan:
-            url = _makeUrl("timespan/to-ticks");
+            url = urlBuilder("timespan/to-ticks");
     }
     makePostRequest(url, model, callback);
 }
@@ -192,14 +192,13 @@ function convertDateToTicks(convertType,  dateStr, timeZone, callback) {
 function convertTicksToDate(convertType, ticksStr, timeZone,callback) {
     let model = { Ticks: ticksStr, TimeZoneId: timeZone };
 
-    var url = _makeUrl("from-ticks");
-    console.log("Convert type: " + convertType);
+    var url = urlBuilder("from-ticks");
     switch (convertType) {
         case convertTypes.Unix:
-            url = _makeUrl("from-unix");
+            url = urlBuilder("from-unix");
             break;
         case convertTypes.TimeSpan:
-            url = _makeUrl("timespan/from-ticks");
+            url = urlBuilder("timespan/from-ticks");
             break;
     }
     makePostRequest(url, model, callback);
@@ -207,13 +206,13 @@ function convertTicksToDate(convertType, ticksStr, timeZone,callback) {
 
 function convertTicksDifference(ticks1, ticks2, callback) {
     let model = { Ticks1: ticks1, Ticks2: ticks2 };
-    var url = _makeUrl("timespan/ticks-difference");
+    var url = urlBuilder("timespan/ticks-difference");
     makePostRequest(url, model, callback);
 }
 
 function convertTicksGreater(ticks1, ticks2, callback) {
     let model = { Ticks1: ticks1, Ticks2: ticks2 };
-    var url = _makeUrl("ticks-greater");
+    var url = urlBuilder("ticks-greater");
     makePostRequest(url, model, callback);
 }
 
@@ -225,7 +224,7 @@ function convertDateTimeDiff(dt1,dt2,timeZone)
     let model = [{ dateTime:dt1, timeZoneId:timeZone }, { dateTime:dt2, timeZoneId:timeZone }];
     loadTemplate('dateTimeDifferenceDisplay').then(
         (rowHtml) => {
-            makePostRequest(_makeUrl("get-difference"), model , function (data) {
+            makePostRequest(urlBuilder("get-difference"), model , function (data) {
                 let updatedHtml = rowHtml
                     .replaceAll("__days", data.days)
                     .replaceAll("__hours", data.hours)
@@ -256,7 +255,7 @@ function checkEnableConvert(controlIds) {
 
 async function getNows() {
     const rowHtml = await loadTemplate('nowRow');
-    makeGetRequest(_makeUrl("now"), function (data) {
+    makeGetRequest(urlBuilder("now"), function (data) {
         const container = $("#nowResult");
         container.empty();
 

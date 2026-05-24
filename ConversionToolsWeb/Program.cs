@@ -27,6 +27,12 @@ namespace ConversionToolsWeb
                 app.UseExceptionHandler("/Error");
             }
             app.UseStaticFiles();
+            app.Use(async (ctx, next) =>
+            {
+                var prefix = ctx.Request.Headers["X-Forwarded-Prefix"].FirstOrDefault();
+                if (!string.IsNullOrEmpty(prefix)) ctx.Request.PathBase = prefix;
+                await next();
+            });
             app.UseRouting();
             app.MapRazorPages();
             app.MapControllers();

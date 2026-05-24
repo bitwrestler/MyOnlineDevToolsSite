@@ -44,8 +44,12 @@ function copyToClipboard(text) {
     navigator.clipboard.writeText(text)
         .catch(err => console.error("Copy failed:", err));
 }
+
 async function loadTemplate(templateName) {
-    return await $.get("/templates/" + templateName + ".html");
+    return await $.get("/templates/" + templateName + ".html").then(
+        template => {
+        return template.replace(/__APP_BASE__/g, window.APP_BASE_PATH);
+    });
 }
 
 function makeGetRequest(url, callback) {
@@ -75,6 +79,15 @@ function _makeRequest(url, model, callback, requestType) {
     });
 }
 
-function _makeUrl(suffix) {
-    return baseApiUrl + "/" + suffix;
+class ApiUrlBuilder {
+    constructor(apiEndpoint) {
+        this.apiEndpoint = apiEndpoint;
+    }
+
+    makeUrl(path) {
+        const appBase = window.APP_BASE_PATH || '/';
+        const base = appBase.endsWith('/') ? appBase : appBase + '/';
+        return base + this.apiEndpoint + "/" + path;
+    }
 }
+
