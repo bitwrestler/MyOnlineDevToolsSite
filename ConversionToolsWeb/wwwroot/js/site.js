@@ -39,6 +39,18 @@
 
 })(jQuery);
 
+class ApiUrlBuilder {
+    constructor(apiEndpoint) {
+        this.apiEndpoint = apiEndpoint;
+    }
+
+    makeUrl(path) {
+        const appBase = window.APP_BASE_PATH || '/';
+        const base = appBase.endsWith('/') ? appBase : appBase + '/';
+        return base + this.apiEndpoint + "/" + path;
+    }
+}
+
 
 function copyToClipboard(text) {
     navigator.clipboard.writeText(text)
@@ -77,17 +89,5 @@ function _makeRequest(url, model, callback, requestType) {
         success: callback,
         error: errorCallback
     });
-}
-
-class ApiUrlBuilder {
-    constructor(apiEndpoint) {
-        this.apiEndpoint = apiEndpoint;
-    }
-
-    makeUrl(path) {
-        const appBase = window.APP_BASE_PATH || '/';
-        const base = appBase.endsWith('/') ? appBase : appBase + '/';
-        return base + this.apiEndpoint + "/" + path;
-    }
 }
 

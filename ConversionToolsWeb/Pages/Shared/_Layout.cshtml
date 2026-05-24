@@ -8,6 +8,8 @@
     <script>window.APP_BASE_PATH = '@(Context.Request.PathBase.Value ?? "/")';</script>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@@picocss/pico@@2/css/pico.min.css">
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
 </head>
 <body>
     <header>
@@ -17,7 +19,7 @@
             <h1 class="banner-title">Developer Tools</h1>
         </div>
         <div>
-            <h7><a class="secondary" href="/api-docs">API Documentation</a></h7>
+            <h7><a class="secondary" href="~/api-docs">API Documentation</a></h7>
         </div>
     </header>
        
@@ -25,7 +27,7 @@
         
         <nav>
             <ul>
-                <li><a href="/#datetime" role="button" class="outline">DateTime</a></li>
+                <li><a href="~/#datetime" role="button" class="outline">DateTime</a></li>
                 <li><a href="~/MyIP#myip" role="button" class="outline">IP Address</a></li>
             </ul>
         </nav>
@@ -40,8 +42,7 @@
         </div>
     </footer>
 
-    <script src="~/lib/jquery/dist/jquery.min.js"></script>
-    <script src="~/js/site.js" asp-append-version="true"></script>
+    
 
     @await RenderSectionAsync("Scripts", required: false)
 </body>
