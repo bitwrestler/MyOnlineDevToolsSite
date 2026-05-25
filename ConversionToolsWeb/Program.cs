@@ -42,6 +42,7 @@ namespace ConversionToolsWeb
                         ctx.Request.Path = remainingPath;
                     }
                 }
+                ctx.Response.Headers["X-Debug-PathBase"] = prefix;
                 await next();
             });
             app.UseStaticFiles();
