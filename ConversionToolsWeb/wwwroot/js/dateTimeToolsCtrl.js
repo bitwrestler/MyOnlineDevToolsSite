@@ -226,7 +226,7 @@ function convertDateTimeDiff(dt1,dt2,timeZone)
     let container = $(ctrlData.result);
     container.empty();
     let model = [{ dateTime:dt1, timeZoneId:timeZone }, { dateTime:dt2, timeZoneId:timeZone }];
-    loadTemplate(urlBuilder,'dateTimeDifferenceDisplay').then(
+    loadTemplate('dateTimeDifferenceDisplay').then(
         (rowHtml) => {
             makePostRequest(urlBuilder.makeUrl("get-difference"), model , function (data) {
                 let updatedHtml = rowHtml
@@ -258,7 +258,7 @@ function checkEnableConvert(controlIds) {
 }
 
 async function getNows() {
-    const rowHtml = await loadTemplate(urlBuilder,'nowRow');
+    const rowHtml = await loadTemplate('nowRow');
     makeGetRequest(urlBuilder.makeUrl("now"), function (data) {
         const container = $("#nowResult");
         container.empty();
