@@ -26,13 +26,25 @@ namespace ConversionToolsWeb
             {
                 app.UseExceptionHandler("/Error");
             }
-            app.UseStaticFiles();
             app.Use(async (ctx, next) =>
             {
                 var prefix = ctx.Request.Headers["X-Forwarded-Prefix"].FirstOrDefault();
-                if (!string.IsNullOrEmpty(prefix)) ctx.Request.PathBase = prefix;
+                if (!string.IsNullOrEmpty(prefix))
+                {
+                    if (!prefix.StartsWith("/"))
+                    {
+                        prefix = "/" + prefix;
+                    }
+                    prefix = prefix.TrimEnd('/');
+                    if (ctx.Request.Path.StartsWithSegments(prefix, out var remainingPath))
+                    {
+                        ctx.Request.PathBase = prefix;
+                        ctx.Request.Path = remainingPath;
+                    }
+                }
                 await next();
             });
+            app.UseStaticFiles();
             app.UseRouting();
             app.MapRazorPages();
             app.MapControllers();
