@@ -27,24 +27,31 @@ namespace ConversionToolsWeb
                 app.UseExceptionHandler("/Error");
             }
             app.Use(async (ctx, next) =>
-            {
-                var prefix = ctx.Request.Headers["X-Forwarded-Prefix"].FirstOrDefault();
-                if (!string.IsNullOrEmpty(prefix))
-                {
-                    if (!prefix.StartsWith("/"))
-                    {
-                        prefix = "/" + prefix;
-                    }
-                    prefix = prefix.TrimEnd('/');
-                    if (ctx.Request.Path.StartsWithSegments(prefix, out var remainingPath))
-                    {
-                        ctx.Request.PathBase = prefix;
-                        ctx.Request.Path = remainingPath;
-                    }
-                }
-                ctx.Response.Headers["X-Debug-PathBase"] = prefix;
-                await next();
-            });
+{
+    var prefix = ctx.Request.Headers["X-Forwarded-Prefix"].FirstOrDefault();
+    if (!string.IsNullOrEmpty(prefix))
+    {
+        if (!prefix.StartsWith("/"))
+        {
+            prefix = "/" + prefix;
+        }
+        prefix = prefix.TrimEnd('/');
+
+        ctx.Request.PathBase = prefix;
+
+        if (ctx.Request.Path.StartsWithSegments(prefix, out var remainingPath))
+        {
+            ctx.Request.Path = remainingPath;
+        }
+    }
+
+    ctx.Response.Headers["X-Debug-PathBase"] = ctx.Request.PathBase.HasValue
+        ? ctx.Request.PathBase.Value
+        : "";
+    ctx.Response.Headers["X-Debug-Path"] = ctx.Request.Path.Value;
+
+    await next();
+});
             app.UseStaticFiles();
             app.UseRouting();
             app.MapRazorPages();
