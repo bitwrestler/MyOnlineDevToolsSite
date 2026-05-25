@@ -57,8 +57,9 @@ function copyToClipboard(text) {
         .catch(err => console.error("Copy failed:", err));
 }
 
-async function loadTemplate(templateName) {
-    return await $.get("/templates/" + templateName + ".html").then(
+async function loadTemplate(urlBuilder,templateName) {
+    let url = urlBuilder.makeUrl("templates/" + templateName + ".html");
+    return await $.get(url).then(
         template => {
         return template.replace(/__APP_BASE__/g, window.APP_BASE_PATH);
     });
