@@ -197,3 +197,24 @@ footer div {
         opacity: 1;
         transform: translate(-50%, 0);
     }
+
+.hhmm-result {
+    display: none;
+    width: 12rem;
+    margin-top: 1rem;
+    margin-left: auto;
+    margin-right: auto;
+    padding: 0.5rem 1rem;
+    border: 3px solid var(--pico-muted-border-color, #adb5bd);
+    border-radius: 0.5rem;
+    font-size: 1.75rem;
+    font-weight: 600;
+    color: #86efac;
+    text-align: center;
+    background: var(--pico-card-background-color, #fff);
+}
+
+/* Show the result only when at least one input has a value (i.e. is no longer showing its placeholder). */
+.grid:has(input:not(:placeholder-shown)) ~ .hhmm-result {
+    display: block;
+}

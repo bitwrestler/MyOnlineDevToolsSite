@@ -1,5 +1,5 @@
 $(function () {
-    const resultSelector = '#hhmmResult';
+    const resultSelector = '#hhmmResult .hhmm-result-value';
     const entrySelector = '.hhmm-entry';
     const urlBuilder = new ApiUrlBuilder('api/datetime');
 
@@ -17,11 +17,11 @@ $(function () {
             type: 'POST',
             data: JSON.stringify({ HHMMEntries: entries }),
             success: function (data) {
-                $(resultSelector).text(data);
+                $(resultSelector).text((Number(data) || 0).toFixed(2));
             },
             error: function (jqXHR, textStatus, errorThrown) {
                 console.error('add-hhmm failed:', textStatus, errorThrown, jqXHR.responseText);
-                $(resultSelector).text('error: ' + (jqXHR.responseText || textStatus));
+                $(resultSelector).text('error');
             }
         });
     }
