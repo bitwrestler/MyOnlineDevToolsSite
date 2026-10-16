@@ -11,6 +11,54 @@
             return DateTime.Parse(dateTimeString);
         }
 
+        public HHMMStruct ParseHHMMCollection(IEnumerable<string> sources)
+        {
+            var hhmm = new List<HHMMStruct>();
+            foreach (var source in sources)
+            {
+                hhmm.Add(ParseHHMM(source));
+            }
+
+            return hhmm.Total();
+        }
+
+        private static HHMMStruct ParseHHMM(string source)
+        {
+            if (string.IsNullOrWhiteSpace(source))
+            {
+                return new HHMMStruct(0, 0);
+            }
+
+            var pairs = source.Split(new[] { ' ', '\t', '\n', '\r', '+' }, StringSplitOptions.RemoveEmptyEntries);
+
+            int totalHours = 0;
+            int totalMinutes = 0;
+
+            foreach (var pair in pairs)
+            {
+                var parts = pair.Split(new[] { '.', ':' });
+
+                if (parts.Length != 2)
+                {
+                    continue;
+                }
+
+                if (!int.TryParse(parts[0], out var h) || !int.TryParse(parts[1], out var m))
+                {
+                    continue;
+                }
+
+                if (h < 0 || m < 0)
+                {
+                    continue;
+                }
+
+                totalHours += h;
+                totalMinutes += m;
+            }
+            return new HHMMStruct(totalHours, totalMinutes);
+        }
+        
         public TimeSpan ParseTimeSpan(string? timeSpanString)
         {
             if (string.IsNullOrWhiteSpace(timeSpanString))

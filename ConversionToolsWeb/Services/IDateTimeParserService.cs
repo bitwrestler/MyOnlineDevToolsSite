@@ -5,5 +5,6 @@ namespace ConversionToolsWeb.Services
     {
         DateTime ParseDateTime(string? dateTimeString);
         TimeSpan ParseTimeSpan(string? timeSpanString);
+        HHMMStruct ParseHHMMCollection(IEnumerable<string> sources);
     }
 }

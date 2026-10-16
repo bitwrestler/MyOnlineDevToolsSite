@@ -193,6 +193,13 @@ namespace ConversionToolsWeb.Controllers.API
             return Ok(new DifferenceResponse(ts));
         }
 
+        [HttpPost]
+        [Route("add-hhmm")]
+        public IActionResult AddHHMM(HHMMRequest sources)
+        {
+            return Ok(_dateTimeParserService.ParseHHMMCollection(sources.HHMMEntries));
+        }
+        
         private DateTimeWithTimezone ConvertToDateTimeWithTimeZone(DateTimeConversionRequest request)
         {
             var d = _dateTimeParserService.ParseDateTime(request.DateTime);
