@@ -5,6 +5,8 @@
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
     <LangVersion>latestmajor</LangVersion>
+    <TransformOnBuild>true</TransformOnBuild>
+    <TransformOnPublish>true</TransformOnPublish>
   </PropertyGroup>
 
   <ItemGroup>
@@ -13,20 +15,29 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Service Include="{508349b6-6b84-4df5-91f0-309beebad82d}" />
+    <Service Include="{508349b6-6b84-4df5-91beebad82d}" />
   </ItemGroup>
 
-  <ItemGroup Condition="'$(Configuration)' != 'Debug' And $(SUPPRESS_VERSION_BUMP) == ''">
+  <ItemGroup>
     <None Update="version.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
       <LastGenOutput>version.cs</LastGenOutput>
     </None>
-
     <Compile Update="version.cs">
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
       <DependentUpon>version.tt</DependentUpon>
     </Compile>
   </ItemGroup>
+
+  <Target Name="TransformT4Templates"
+          BeforeTargets="CoreCompile"
+          Condition="'$(DesignTimeBuild)' != 'true' And ('$(TransformOnBuild)' == 'true' Or '$(TransformOnPublish)' == 'true')">
+    <ItemGroup>
+      <_T4Template Include="**\*.tt" Exclude="**\obj\**\*.tt;**\bin\**\*.tt" />
+    </ItemGroup>
+    <Message Text="T4: transforming %(_T4Template.Identity)" Importance="high" />
+    <Exec Command='dotnet t4 "%(_T4Template.Identity)"' />
+  </Target>
 
 </Project>

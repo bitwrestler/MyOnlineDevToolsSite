@@ -5,16 +5,18 @@
 <#@ import namespace="System.Collections.Generic" #>
 <#@ output extension=".cs" #>
 <#
-	int major = 1;
-	int minor = 0;
+    int major = 1;
+    int minor = 0;
 
-	const string buildNumberPersistFile = "build_number.txt";
+    const string buildNumberPersistFile = "build_number.txt";
 
-	var currentBuildNumber = int.Parse(System.IO.File.ReadAllText(buildNumberPersistFile));
-	var newBuildNumber = currentBuildNumber + 1;
+    int currentBuildNumber = System.IO.File.Exists(buildNumberPersistFile)
+        ? int.Parse(System.IO.File.ReadAllText(buildNumberPersistFile).Trim())
+        : 0;
+    var newBuildNumber = currentBuildNumber + 1;
 
-	string version = string.Format("{0}.{1}.{2:00000}.{3}", major, minor, newBuildNumber , DateTime.UtcNow.ToString("yyyyMMddHHmm"));
-	System.IO.File.WriteAllText(buildNumberPersistFile, newBuildNumber.ToString());
+    string version = string.Format("{0}.{1}.{2:00000}.{3}", major, minor, newBuildNumber, DateTime.UtcNow.ToString("yyyyMMddHHmm"));
+    System.IO.File.WriteAllText(buildNumberPersistFile, newBuildNumber.ToString());
 #>
 namespace ConversionToolsWeb
 {
