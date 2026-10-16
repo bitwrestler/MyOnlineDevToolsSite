@@ -197,7 +197,7 @@ namespace ConversionToolsWeb.Controllers.API
         [Route("add-hhmm")]
         public IActionResult AddHHMM(HHMMRequest sources)
         {
-            return Ok(_dateTimeParserService.ParseHHMMCollection(sources.HHMMEntries));
+            return Ok(_dateTimeParserService.ParseHHMMCollection(sources.HHMMEntries).TotalHours);
         }
         
         private DateTimeWithTimezone ConvertToDateTimeWithTimeZone(DateTimeConversionRequest request)
