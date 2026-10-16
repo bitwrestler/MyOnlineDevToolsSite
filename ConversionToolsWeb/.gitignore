@@ -1,6 +1,2 @@
 publish/
 publish.zip
-
-# T4-generated
-version.cs
-build_number.txt

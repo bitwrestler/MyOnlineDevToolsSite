@@ -13,9 +13,7 @@ ENV SUPPRESS_VERSION_BUMP=1
 ARG BUILD_CONFIGURATION=Release
 WORKDIR /src
 COPY ["ConversionToolsWeb.csproj", "./"]
-COPY [".config/dotnet-tools.json", "./.config/"]
 RUN dotnet restore "ConversionToolsWeb.csproj"
-RUN dotnet tool restore
 COPY . .
 RUN dotnet build -c $BUILD_CONFIGURATION -o /app/build
 
