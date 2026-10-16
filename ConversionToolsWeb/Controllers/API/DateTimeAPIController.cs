@@ -195,7 +195,7 @@ namespace ConversionToolsWeb.Controllers.API
 
         [HttpPost]
         [Route("add-hhmm")]
-        public IActionResult AddHHMM(HHMMRequest sources)
+        public IActionResult AddHHMM([FromBody] HHMMRequest sources)
         {
             return Ok(_dateTimeParserService.ParseHHMMCollection(sources.HHMMEntries).TotalHours);
         }

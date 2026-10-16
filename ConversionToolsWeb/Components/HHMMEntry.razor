@@ -1,0 +1,16 @@
+<h3>HH:MM Calculator</h3>
+
+<div class="grid">
+    @for (var i = 0; i < EntryCount; i++)
+    {
+        <HHMMSingleEntry Index="i" />
+    }
+    <div></div>
+    <div id="hhmmResult" aria-live="polite">&mdash;</div>
+</div>
+
+<script src="js/dateTimeTools.js" asp-append-version="true"></script>
+
+@code {
+    [Parameter] public int EntryCount { get; set; } = 7;
+}
