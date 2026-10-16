@@ -140,11 +140,21 @@ footer div {
     margin-bottom: 0.5rem;
 }
 
+    /* Headings carry default margin-bottom from Pico; inside the flex row that
+       margin becomes part of the heading's margin box and shifts the icon down.
+       Reset it so the icon centres against the heading's text box, not its margin. */
+    .now-row :is(h1, h2, h3, h4, h5, h6) {
+        margin-top: 0;
+        margin-bottom: 0;
+    }
+
 .now-row img {
     cursor: pointer;
     display: block;
     height: 22px;
     width: 22px;
+    flex: 0 0 auto; /* don't shrink, keeps alignment stable */
+    vertical-align: middle;
 }
 
 .info-row {

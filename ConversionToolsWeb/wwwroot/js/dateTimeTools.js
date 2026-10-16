@@ -4,6 +4,19 @@ $(function () {
     const urlBuilder = new ApiUrlBuilder('api/datetime');
 
     $(document).on('input', entrySelector, calculateHHMM);
+    $(document).on('click', '.hhmm-clear', clearHHMMEntries);
+
+    focusFirstEntry();
+
+    function focusFirstEntry() {
+        $(entrySelector).first().focus();
+    }
+
+    function clearHHMMEntries() {
+        // Result hides itself via :has(:placeholder-shown) CSS, so no manual reset needed.
+        $(entrySelector).val('');
+        focusFirstEntry();
+    }
 
     function calculateHHMM() {
         const entries = $(entrySelector).map(function () {
